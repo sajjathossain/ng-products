@@ -21,7 +21,6 @@ export class NavbarComponent {
 
   navitems: TNavItem[] = [
     { title: 'Home', link: '/' },
-    { title: 'New', link: '/create' },
     { title: 'About', link: '/about' },
   ];
 }
