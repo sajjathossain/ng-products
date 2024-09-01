@@ -1,23 +1,20 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { MobileNavComponent } from './mobile/mobile.component';
+import { TNavItem } from '@/lib/schemas';
 
 @Component({
   standalone: true,
   selector: 'app-navbar',
-  imports: [RouterModule],
+  imports: [RouterModule, MobileNavComponent],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
   title = 'Products';
-  _isOpen = signal(false);
 
-  _navitems = [
+  _navitems: TNavItem[] = [
     { title: 'Home', link: '/' },
-    { title: 'About', link: '/about' },
     { title: 'New', link: '/create' },
+    { title: 'About', link: '/about' },
   ];
-
-  _toggle() {
-    this._isOpen.set(!this._isOpen());
-  }
 }

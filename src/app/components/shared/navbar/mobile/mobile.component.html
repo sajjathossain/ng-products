@@ -1,0 +1,50 @@
+<ul class="hidden md:flex items-center gap-6 text-base">
+  @for (item of _navitems; track $index) {
+    <li
+      class="flex items-center gap-2 hove:text-gray-200 hover:underline hover:underline-offset-4 transition-all delay-300"
+    >
+      <a
+        class="text-white hover:text-gray-200"
+        [routerLink]="item.link"
+        routerLinkActive="text-gray-200"
+      >
+        {{ item.title }}
+      </a>
+    </li>
+  }
+</ul>
+
+<button
+  class="md:hidden p-2 active:bg-gray-200/25 active:text-gray-800 rounded-full"
+  (click)="_toggle()"
+>
+  @if (!_isOpen()) {
+    <svg
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-6 aspect-square"
+    >
+      <path
+        fill="currentColor"
+        fill-rule="evenodd"
+        d="M3 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1"
+        clip-rule="evenodd"
+      />
+    </svg>
+  }
+
+  @if (_isOpen()) {
+    <svg
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+      class="w-6 aspect-square"
+    >
+      <path
+        fill="currentColor"
+        fill-rule="evenodd"
+        d="M4.293 4.293a1 1 0 0 1 1.414 0L10 8.586l4.293-4.293a1 1 0 1 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 0 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L8.586 10L4.293 5.707a1 1 0 0 1 0-1.414"
+        clip-rule="evenodd"
+      />
+    </svg>
+  }
+</button>
