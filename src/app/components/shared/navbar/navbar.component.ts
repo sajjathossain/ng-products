@@ -41,6 +41,7 @@ export class NavbarComponent {
   }
 
   toggleForm(_event: MouseEvent) {
+    console.log({ _event });
     this.showForm.set(!this.showForm());
   }
 }
