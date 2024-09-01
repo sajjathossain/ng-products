@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MobileNavComponent } from './mobile/mobile.component';
 import { TNavItem } from '@/lib/schemas';
@@ -30,18 +30,4 @@ export class NavbarComponent {
     { title: 'Home', link: '/' },
     { title: 'About', link: '/about' },
   ];
-
-  showForm = signal(false);
-
-  @ViewChild('mobileNavSidebar', { read: NgTemplateOutlet })
-  mobileNavSidebar!: TemplateRef<unknown>;
-
-  assignTemplate(template: TemplateRef<unknown>) {
-    this.mobileNavSidebar = template;
-  }
-
-  toggleForm(_event: MouseEvent) {
-    console.log({ _event });
-    this.showForm.set(!this.showForm());
-  }
 }

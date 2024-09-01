@@ -15,7 +15,6 @@
   </div>
 
   <button
-    (click)="toggleForm($event)"
     class="p-2 active:bg-gray-200/25 active:text-gray-800 text-gray-300 rounded-full flex flex-col items-center justify-center text-xs font-sans font-semibold w-fit aspect-square"
   >
     <svg
@@ -32,45 +31,35 @@
     </svg>
   </button>
 
-  <button
-    class="p-2 active:bg-gray-200/25 active:text-gray-800 rounded-full"
-    (click)="toggle()"
-  >
-    @if (!isOpen()) {
-      <svg
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        class="w-6 aspect-square"
-      >
-        <path
-          fill="currentColor"
-          fill-rule="evenodd"
-          d="M3 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1"
-          clip-rule="evenodd"
-        />
-      </svg>
-    }
-
-    @if (isOpen()) {
-      <svg
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        class="w-6 aspect-square"
-      >
-        <path
-          fill="currentColor"
-          fill-rule="evenodd"
-          d="M4.293 4.293a1 1 0 0 1 1.414 0L10 8.586l4.293-4.293a1 1 0 1 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 0 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L8.586 10L4.293 5.707a1 1 0 0 1 0-1.414"
-          clip-rule="evenodd"
-        />
-      </svg>
-    }
-  </button>
+  <div class="drawer-overlay">
+    <input id="nav-drawer" type="checkbox" class="drawer-toggle w-fit" />
+    <div class="drawer-content">
+      <label for="nav-drawer" class="drawer-button btn btn-primary p-2">
+        <svg
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-6 aspect-square"
+        >
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M3 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1m0 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </label>
+    </div>
+    <div class="drawer-side">
+      <label
+        for="nav-drawer"
+        aria-label="close sidebar"
+        class="drawer-overlay"
+      ></label>
+      <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+        <!-- Sidebar content here -->
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+      </ul>
+    </div>
+  </div>
 </div>
-
-<ng-template #mobileNavSidebar>
-  <div
-    data-sidebar
-    class="w-dvw h-full backdrop-blur-md bg-slate-500 fixed top-0 z-10"
-  ></div>
-</ng-template>
