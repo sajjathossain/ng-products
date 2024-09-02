@@ -10,7 +10,7 @@
     </label>
     <form
       [formGroup]="productForm"
-      (submit)="handleSubmit()"
+      (submit)="productId() ? handleUpdate() : handleSubmit()"
       class="menu bg-base-200 text-base-content min-h-full w-full md:w-1/3 p-4"
     >
       <div class="form-control">
@@ -52,7 +52,7 @@
           </span>
         </label>
         <input
-          type="text"
+          type="number"
           class="input input-bordered"
           formControlName="price"
           [class.input-error]="
@@ -75,7 +75,7 @@
           </span>
         </label>
         <input
-          type="text"
+          type="number"
           class="input input-bordered"
           formControlName="quantity"
           [class.input-error]="
@@ -106,7 +106,7 @@
         class="btn btn-success mt-4"
         [disabled]="productForm.invalid"
       >
-        Submit
+        {{ productId() ? "Update" : "Submit" }}
       </button>
       <button
         (click)="toggleForm.emit(false)"
