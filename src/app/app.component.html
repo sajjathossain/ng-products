@@ -1,3 +1,4 @@
-<app-navbar />
+<app-navbar (showForm)="toggleForm()" />
+<app-products-form [showForm]="showForm()" />
 
 <router-outlet />
