@@ -4,7 +4,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
   selector: 'app-show-form-btn',
   template: `
     <button
-      (click)="showForm.emit(true)"
+      (click)="toggleForm.emit(true)"
       class="flex items-center justify-center btn btn-circle btn-info btn-md"
     >
       <svg
@@ -25,5 +25,5 @@ import { Component, EventEmitter, Output } from '@angular/core';
   standalone: true,
 })
 export class ShowFormBtnComponent {
-  @Output() showForm = new EventEmitter<boolean>();
+  @Output() toggleForm = new EventEmitter<boolean>();
 }

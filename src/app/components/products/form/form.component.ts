@@ -1,5 +1,12 @@
 import { ContainerComponent } from '@/components/shared';
-import { Component, Input } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -10,7 +17,7 @@ import {
 @Component({
   selector: 'app-products-form',
   templateUrl: './form.component.html',
-  imports: [ContainerComponent, ReactiveFormsModule],
+  imports: [ContainerComponent, ReactiveFormsModule, NgTemplateOutlet],
   standalone: true,
 })
 export class ProductsFormComponent {
@@ -47,6 +54,8 @@ export class ProductsFormComponent {
     },
   );
   @Input({ required: true }) showForm = false;
+  @Input() formContent!: TemplateRef<unknown>;
+  @Output() toggleForm = new EventEmitter<boolean>();
 
   handleSubmit() {
     console.log('submit', this.productForm.value);

@@ -22,5 +22,5 @@ export class MobileNavComponent {
   })
   navitems: TNavItem[] = [];
 
-  @Output() showForm = new EventEmitter<boolean>();
+  @Output() toggleForm = new EventEmitter<boolean>();
 }

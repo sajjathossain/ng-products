@@ -26,7 +26,7 @@ import { NgTemplateOutlet } from '@angular/common';
 export class NavbarComponent {
   title = 'Products';
 
-  @Output() showForm = new EventEmitter<boolean>();
+  @Output() toggleForm = new EventEmitter<boolean>();
 
   navitems: TNavItem[] = [
     { title: 'Home', link: '/' },

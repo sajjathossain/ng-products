@@ -1,4 +1,4 @@
-<div class="drawer-overlay relative z-30">
+<div class="drawer-overlay absolute z-50 h-full">
   <input
     id="form-drawer"
     type="checkbox"
@@ -6,15 +6,12 @@
     [checked]="showForm"
   />
   <div class="drawer-side">
-    <label
-      for="form-drawer"
-      aria-label="close sidebar"
-      class="drawer-overlay"
-    ></label>
+    <label for="form-drawer" aria-label="close sidebar" class="drawer-overlay">
+    </label>
     <form
       [formGroup]="productForm"
       (submit)="handleSubmit()"
-      class="menu bg-base-200 text-base-content min-h-full w-80 p-4"
+      class="menu bg-base-200 text-base-content min-h-full w-full md:w-1/3 p-4"
     >
       <div class="form-control">
         <label class="label">
@@ -32,7 +29,7 @@
           "
           formControlName="name"
         />
-        <label class="form-control w-full max-w-xs">
+        <label class="form-control w-full">
           <div class="label">
             <span class="label-text">
               Select a category
@@ -110,6 +107,14 @@
         [disabled]="productForm.invalid"
       >
         Submit
+      </button>
+      <button
+        (click)="toggleForm.emit(false)"
+        type="button"
+        aria-label="close form"
+        class="btn btn-neutral mt-2"
+      >
+        close
       </button>
     </form>
   </div>

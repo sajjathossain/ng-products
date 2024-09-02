@@ -1,11 +1,11 @@
-<app-navbar (showForm)="toggleForm()" />
-<app-products-form [showForm]="showForm()" />
+<app-navbar (toggleForm)="toggleForm()" />
+<app-products-form [showForm]="showForm()" (toggleForm)="toggleForm()" />
 
-<div class="h-dvh">
+<div class="h-dvh w-full">
   <app-container>
     <app-show-form-btn
-      class="absolute z-20 bottom-4 right-0 hidden md:block"
-      (showForm)="toggleForm()"
+      class="absolute bottom-4 right-0 hidden md:block"
+      (toggleForm)="toggleForm()"
     />
   </app-container>
 </div>
