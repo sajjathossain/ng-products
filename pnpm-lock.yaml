@@ -29,6 +29,9 @@ dependencies:
   '@angular/router':
     specifier: ^18.1.0
     version: 18.2.2(@angular/common@18.2.2)(@angular/core@18.2.2)(@angular/platform-browser@18.2.2)(rxjs@7.8.1)
+  '@tanstack/angular-virtual':
+    specifier: ^3.10.6
+    version: 3.10.6(@angular/core@18.2.2)
   gsap:
     specifier: ^3.12.5
     version: 3.12.5
@@ -55,9 +58,6 @@ devDependencies:
   '@angular/compiler-cli':
     specifier: ^18.1.0
     version: 18.2.2(@angular/compiler@18.2.2)(typescript@5.5.4)
-  '@tailwindcss/forms':
-    specifier: ^0.5.8
-    version: 0.5.8(tailwindcss@3.4.10)
   '@types/jasmine':
     specifier: ~5.1.0
     version: 5.1.4
@@ -3258,14 +3258,20 @@ packages:
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
     dev: true
 
-  /@tailwindcss/forms@0.5.8(tailwindcss@3.4.10):
-    resolution: {integrity: sha512-DJs7B7NPD0JH7BVvdHWNviWmunlFhuEkz7FyFxE4japOWYMLl9b1D6+Z9mivJJPWr6AEbmlPqgiFRyLwFB1SgQ==}
+  /@tanstack/angular-virtual@3.10.6(@angular/core@18.2.2):
+    resolution: {integrity: sha512-vgWY43CdsGvbbjv30ag1ZmzMVPxNsKPdtvyi/TK4NeUfDnWqXS8/zNnVpndpHonhqHCcVwdRxq85ZHDWVYv1gQ==}
+    engines: {node: '>=12'}
     peerDependencies:
-      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1 || >= 4.0.0-alpha.20'
+      '@angular/core': '>=17'
     dependencies:
-      mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.10
-    dev: true
+      '@angular/core': 18.2.2(rxjs@7.8.1)(zone.js@0.14.10)
+      '@tanstack/virtual-core': 3.10.6
+      tslib: 2.7.0
+    dev: false
+
+  /@tanstack/virtual-core@3.10.6:
+    resolution: {integrity: sha512-1giLc4dzgEKLMx5pgKjL6HlG5fjZMgCjzlKAlpr7yoUtetVPELgER1NtephAI910nMwfPTHNyWKSFmJdHkz2Cw==}
+    dev: false
 
   /@tufjs/canonical-json@2.0.0:
     resolution: {integrity: sha512-yVtV8zsdo8qFHe+/3kw81dSLyF7D576A5cCFCi4X7B39tWT7SekaEFUnvnWJHz+9qO7qJTah1JbrDjWKqFtdWA==}
@@ -6763,11 +6769,6 @@ packages:
       schema-utils: 4.2.0
       tapable: 2.2.1
       webpack: 5.94.0(esbuild@0.23.0)
-    dev: true
-
-  /mini-svg-data-uri@1.4.4:
-    resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
-    hasBin: true
     dev: true
 
   /minimalistic-assert@1.0.1:
