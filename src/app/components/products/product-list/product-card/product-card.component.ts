@@ -3,6 +3,7 @@ import { RxDBService } from '@/services/rxdb.service';
 import { Component, Input } from '@angular/core';
 import { RxDocumentData } from 'rxdb';
 import { toast } from 'ngx-sonner';
+import { CommunicationService } from '@/services/communication.service';
 
 @Component({
   standalone: true,
@@ -10,9 +11,17 @@ import { toast } from 'ngx-sonner';
   templateUrl: './product-card.component.html',
 })
 export class ProductCardComponent {
-  constructor(private rxdb: RxDBService) { }
+  constructor(
+    private rxdb: RxDBService,
+    private communicationService: CommunicationService,
+  ) {}
+
   private readonly collectionName = 'products';
   @Input({ required: true }) product!: RxDocumentData<ProductDocType>;
+
+  udpateProduct(id: string) {
+    this.communicationService.updateProductEmit(id);
+  }
 
   async deleteProduct(id: string) {
     const collection = this.rxdb.getCollection<ProductDocType>(
