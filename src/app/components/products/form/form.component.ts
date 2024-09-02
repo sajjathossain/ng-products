@@ -1,11 +1,15 @@
 import { ContainerComponent } from '@/components/shared';
+import { ProductDocType } from '@/db/product.schema';
+import { RxDBService } from '@/services/rxdb.service';
 import { NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   TemplateRef,
+  signal,
 } from '@angular/core';
 import {
   FormControl,
@@ -13,6 +17,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { filter, first } from 'rxjs';
 
 @Component({
   selector: 'app-products-form',
@@ -20,7 +25,7 @@ import {
   imports: [ContainerComponent, ReactiveFormsModule, NgTemplateOutlet],
   standalone: true,
 })
-export class ProductsFormComponent {
+export class ProductsFormComponent implements OnInit {
   productForm = new FormGroup(
     {
       name: new FormControl('', {
@@ -38,7 +43,10 @@ export class ProductsFormComponent {
         validators: [Validators.required, Validators.min(1)],
         updateOn: 'blur',
       }),
-      description: new FormControl(''),
+      description: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.min(5)],
+      }),
       quantity: new FormControl(1, {
         nonNullable: true,
         validators: [Validators.required, Validators.min(1)],
@@ -56,8 +64,34 @@ export class ProductsFormComponent {
   @Input({ required: true }) showForm = false;
   @Input() formContent!: TemplateRef<unknown>;
   @Output() toggleForm = new EventEmitter<boolean>();
+  private isDbReady = signal(false);
+  private collectionName = 'products';
 
-  handleSubmit() {
-    console.log('submit', this.productForm.value);
+  constructor(private rxdbService: RxDBService) { }
+
+  ngOnInit(): void {
+    this.rxdbService.dataBaseReady$
+      .pipe(
+        filter((ready) => !!ready),
+        first(),
+      )
+      .subscribe(() => this.isDbReady.set(true));
+  }
+
+  async handleSubmit() {
+    console.log('data', this.productForm.value);
+    const id = new Date().getTime().toString();
+    const productXCollection = this.rxdbService.getCollection<ProductDocType>(
+      this.collectionName,
+    );
+    const result = await productXCollection.insert({
+      ...this.productForm.value,
+      name: this.productForm.value.name ?? 'default',
+      price: this.productForm.value.price ?? 1,
+      createdAt: this.productForm.value.createdAt ?? new Date().toISOString(),
+      id,
+    });
+    console.log('result', result);
+    this.toggleForm.emit(true);
   }
 }
