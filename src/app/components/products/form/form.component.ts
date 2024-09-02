@@ -100,9 +100,9 @@ export class ProductsFormComponent implements OnInit {
     id: string | null;
     toggle: boolean;
   }) {
-    this.productForm.reset(params?.values || {});
-    this.productId.set(params?.id || null);
-    this.toggleForm.emit(params?.toggle || false);
+    this.productForm.reset(params?.values ?? {});
+    this.productId.set(params?.id ?? null);
+    this.toggleForm.emit(params?.toggle ?? false);
   }
 
   async handleUpdate() {
