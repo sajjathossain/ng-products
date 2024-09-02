@@ -7,7 +7,7 @@ export const ProductSchema = z.object({
   category: z.string().min(1, 'Category is required'),
   quantity: z.number().min(1, 'Quantity is required'),
   description: z.string().optional(),
-  createdAt: z.date().default(new Date()).optional(),
+  createdAt: z.string().default(new Date().toISOString()).optional(),
 });
 
 export type TProduct = z.infer<typeof ProductSchema>;
