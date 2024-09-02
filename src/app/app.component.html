@@ -1,12 +1,13 @@
 <app-navbar (toggleForm)="toggleForm()" />
 <app-products-form [showForm]="showForm()" (toggleForm)="toggleForm()" />
 
-<div class="h-dvh w-full">
+<div class="h-dvh w-full relative py-4 md:py-20">
   <app-container>
-    <app-show-form-btn
-      class="absolute bottom-4 right-0 hidden md:block"
-      (toggleForm)="toggleForm()"
-    />
+    <app-product-list />
   </app-container>
+  <app-show-form-btn
+    class="fixed bottom-6 right-28 hidden md:block"
+    (toggleForm)="toggleForm()"
+  />
 </div>
 <router-outlet />
