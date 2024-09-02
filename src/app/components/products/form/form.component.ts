@@ -31,7 +31,7 @@ export class ProductsFormComponent implements OnInit {
   constructor(
     private rxdbService: RxDBService,
     private formService: FormService,
-  ) {}
+  ) { }
 
   productForm = new FormGroup(
     {
@@ -83,13 +83,11 @@ export class ProductsFormComponent implements OnInit {
   }
 
   async handleSubmit() {
-    const id = new Date().getTime().toString();
     const values = {
       ...this.productForm.value,
       name: this.productForm.value.name ?? 'default',
       price: this.productForm.value.price ?? 1,
       createdAt: this.productForm.value.createdAt ?? new Date().toISOString(),
-      id,
     };
 
     const result = await this.formService.createProduct({
