@@ -5,7 +5,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
   template: `
     <button
       (click)="toggleForm.emit(true)"
-      class="flex items-center justify-center btn btn-circle btn-info btn-md"
+      class="flex items-center justify-center btn btn-primary btn-md"
     >
       <svg
         viewBox="0 0 20 20"
