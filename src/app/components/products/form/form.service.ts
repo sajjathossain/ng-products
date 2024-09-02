@@ -6,8 +6,8 @@ import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class FormService {
-  private collectionName = 'products';
-  constructor(private rxdbService: RxDBService) { }
+  private readonly collectionName = 'products';
+  constructor(private rxdbService: RxDBService) {}
 
   async createProduct({
     productForm,
@@ -17,17 +17,18 @@ export class FormService {
     productForm: FormGroup<any>;
     values: ProductDocType;
   }) {
-    const id = uuid();
+    const id = new Date().toISOString() + uuid();
     const productXCollection = this.rxdbService.getCollection<ProductDocType>(
       this.collectionName,
     );
-    const result = await productXCollection.insert({
+    const properties = {
       ...values,
       name: productForm.value.name ?? 'default',
       price: productForm.value.price ?? 1,
       createdAt: productForm.value.createdAt ?? new Date().toISOString(),
       id,
-    });
+    };
+    const result = await productXCollection.insert(properties);
 
     if (!result._data) {
       throw new Error('Unable to create product');
