@@ -33,7 +33,7 @@ export class RxDBService {
       throw new Error('Database not initialized');
     }
 
-    return this.rxdb.collections[collectionName];
+    return this.rxdb[collectionName];
   }
 
   public async initDB(dbName: string) {
