@@ -2,11 +2,12 @@ import { ProductDocType } from '@/db/product.schema';
 import { RxDBService } from '@/services/rxdb.service';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class FormService {
   private collectionName = 'products';
-  constructor(private rxdbService: RxDBService) {}
+  constructor(private rxdbService: RxDBService) { }
 
   async createProduct({
     productForm,
@@ -16,7 +17,7 @@ export class FormService {
     productForm: FormGroup<any>;
     values: ProductDocType;
   }) {
-    const id = new Date().getTime().toString();
+    const id = uuid();
     const productXCollection = this.rxdbService.getCollection<ProductDocType>(
       this.collectionName,
     );
