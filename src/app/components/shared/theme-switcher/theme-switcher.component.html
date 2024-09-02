@@ -1,4 +1,4 @@
-<div class="dropdown w-full">
+<div class="dropdown w-full flex justify-center">
   <div [tabIndex]="theme().idx" role="button" class="btn m-1">
     Theme
     <svg
@@ -15,7 +15,7 @@
   </div>
   <ul
     [tabIndex]="theme().idx"
-    class="dropdown-content bg-base-300 rounded-box z-[1] w-52 p-2 shadow-2xl max-h-56 overflow-y-auto"
+    class="dropdown-content bg-base-300 rounded-box z-[1] w-fit p-2 shadow-2xl max-h-56 overflow-y-auto top-14"
   >
     @for (item of themes; track $index) {
       <li (click)="setTheme({ activeTheme: item, idx: $index })">
