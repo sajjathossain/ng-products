@@ -1,13 +1,14 @@
 import { TNavItem } from '@/lib/schemas';
-import { Component, Input, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ContainerComponent } from '../../container/container.component';
+import { ThemeSwitcherComponent } from '../../theme-switcher/theme-switcher.component';
 
 @Component({
   standalone: true,
   templateUrl: './mobile.component.html',
   selector: 'app-mobile-nav',
-  imports: [RouterModule, ContainerComponent],
+  imports: [RouterModule, ContainerComponent, ThemeSwitcherComponent],
 })
 export class MobileNavComponent {
   @Input({
@@ -15,6 +16,5 @@ export class MobileNavComponent {
   })
   navitems: TNavItem[] = [];
 
-  showForm = signal(false);
-  isOpen = signal(false);
+  @Output() showForm = new EventEmitter<boolean>();
 }

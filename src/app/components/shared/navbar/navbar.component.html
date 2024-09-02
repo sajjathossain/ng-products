@@ -3,6 +3,6 @@
 >
   <app-container>
     <app-desktop-nav [navitems]="navitems" />
-    <app-mobile-nav [navitems]="navitems" />
+    <app-mobile-nav (showForm)="showForm.emit($event)" [navitems]="navitems" />
   </app-container>
 </nav>

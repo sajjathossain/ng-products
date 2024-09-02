@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MobileNavComponent } from './mobile/mobile.component';
 import { TNavItem } from '@/lib/schemas';
@@ -25,6 +25,8 @@ import { NgTemplateOutlet } from '@angular/common';
 })
 export class NavbarComponent {
   title = 'Products';
+
+  @Output() showForm = new EventEmitter<boolean>();
 
   navitems: TNavItem[] = [
     { title: 'Home', link: '/' },

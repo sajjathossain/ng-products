@@ -1,24 +1,36 @@
-<div class="w-full flex items-center justify-between md:hidden">
-  <div
-    class="w-fit h-fit flex flex-col items-center text-sm font-sans font-semibold"
-  >
+<div class="btm-nav md:hidden">
+  <div class="text-primary">
     <svg
-      viewBox="0 0 20 20"
-      class="w-6 aspect-square"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <circle cx="5" cy="19" r="1" fill="currentColor" />
+      <path fill="currentColor" d="M4 4h2v9H4z" />
       <path
         fill="currentColor"
-        d="M17 8h1v11H2V8h1V6c0-2.76 2.24-5 5-5c.71 0 1.39.15 2 .42A4.9 4.9 0 0 1 12 1c2.76 0 5 2.24 5 5zM5 6v2h2V6c0-1.13.39-2.16 1.02-3H8C6.35 3 5 4.35 5 6m10 2V6c0-1.65-1.35-3-3-3h-.02A4.98 4.98 0 0 1 13 6v2zm-5-4.22C9.39 4.33 9 5.12 9 6v2h2V6c0-.88-.39-1.67-1-2.22"
+        d="M7 2H3a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1m0 19H3V3h4Z"
+      />
+      <circle cx="12" cy="19" r="1" fill="currentColor" />
+      <path fill="currentColor" d="M11 4h2v9h-2z" />
+      <path
+        fill="currentColor"
+        d="M14 2h-4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1m0 19h-4V3h4Z"
+      />
+      <circle cx="19" cy="19" r="1" fill="currentColor" />
+      <path fill="currentColor" d="M18 4h2v9h-2z" />
+      <path
+        fill="currentColor"
+        d="M21 2h-4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1m0 19h-4V3h4Z"
       />
     </svg>
   </div>
 
-  <button
-    class="p-2 active:bg-gray-200/25 active:text-gray-800 text-gray-300 rounded-full flex flex-col items-center justify-center text-xs font-sans font-semibold w-fit aspect-square"
-  >
+  <button (click)="showForm.emit(true)" class="text-primary">
     <svg
       viewBox="0 0 20 20"
+      stroke="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       class="w-6 aspect-square"
     >
@@ -34,7 +46,7 @@
   <div class="drawer-overlay">
     <input id="nav-drawer" type="checkbox" class="drawer-toggle w-fit" />
     <div class="drawer-content">
-      <label for="nav-drawer" class="drawer-button btn btn-primary p-2">
+      <label for="nav-drawer" class="drawer-button text-primary p-2">
         <svg
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -55,10 +67,10 @@
         aria-label="close sidebar"
         class="drawer-overlay"
       ></label>
-      <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-        <!-- Sidebar content here -->
-        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>
+      <ul
+        class="menu bg-base-100 text-base-content min-h-full w-80 p-4 form-control"
+      >
+        <app-theme-switcher />
       </ul>
     </div>
   </div>
