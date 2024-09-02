@@ -22,13 +22,22 @@ export const productSchema = {
     },
     price: {
       type: 'number',
+      minimum: 1,
+    },
+    quantity: {
+      type: 'number',
+      minimum: 1,
+    },
+    category: {
+      type: 'string',
+      minLength: 1,
     },
     createdAt: {
       type: 'string',
-      default: new Date(),
+      minLength: 1,
     },
   },
-  required: ['name', 'price', 'createdAt'],
+  required: ['name', 'price', 'createdAt', 'category', 'quantity'],
 } as const;
 
 export const productSchemaTyped = toTypedRxJsonSchema(productSchema);
