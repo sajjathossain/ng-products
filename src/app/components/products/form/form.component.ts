@@ -1,7 +1,7 @@
 import { ContainerComponent } from '@/components/shared';
-import { ProductDocType } from '@/db/product.schema';
 import { RxDBService } from '@/services/rxdb.service';
 import { NgTemplateOutlet } from '@angular/common';
+import { toast } from 'ngx-sonner';
 import {
   Component,
   EventEmitter,
@@ -18,14 +18,21 @@ import {
   Validators,
 } from '@angular/forms';
 import { filter, first } from 'rxjs';
+import { FormService } from './form.service';
 
 @Component({
   selector: 'app-products-form',
   templateUrl: './form.component.html',
   imports: [ContainerComponent, ReactiveFormsModule, NgTemplateOutlet],
   standalone: true,
+  providers: [FormService],
 })
 export class ProductsFormComponent implements OnInit {
+  constructor(
+    private rxdbService: RxDBService,
+    private formService: FormService,
+  ) {}
+
   productForm = new FormGroup(
     {
       name: new FormControl('', {
@@ -65,9 +72,6 @@ export class ProductsFormComponent implements OnInit {
   @Input() formContent!: TemplateRef<unknown>;
   @Output() toggleForm = new EventEmitter<boolean>();
   private isDbReady = signal(false);
-  private collectionName = 'products';
-
-  constructor(private rxdbService: RxDBService) { }
 
   ngOnInit(): void {
     this.rxdbService.dataBaseReady$
@@ -79,19 +83,28 @@ export class ProductsFormComponent implements OnInit {
   }
 
   async handleSubmit() {
-    console.log('data', this.productForm.value);
     const id = new Date().getTime().toString();
-    const productXCollection = this.rxdbService.getCollection<ProductDocType>(
-      this.collectionName,
-    );
-    const result = await productXCollection.insert({
+    const values = {
       ...this.productForm.value,
       name: this.productForm.value.name ?? 'default',
       price: this.productForm.value.price ?? 1,
       createdAt: this.productForm.value.createdAt ?? new Date().toISOString(),
       id,
+    };
+
+    const result = await this.formService.createProduct({
+      productForm: this.productForm,
+      values,
     });
-    console.log('result', result);
+
+    if (result) {
+      toast.success('Product created successfully!');
+    }
+
+    if (!result) {
+      toast.error('Unable to create product');
+    }
+
     this.toggleForm.emit(true);
   }
 }
