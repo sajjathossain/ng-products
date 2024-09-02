@@ -1,12 +1,19 @@
 import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from '@/components/shared';
+import { ContainerComponent, NavbarComponent } from '@/components/shared';
 import { ProductsFormComponent } from './components/products/form/form.component';
+import { ShowFormBtnComponent } from './components/shared/show-form-btn/show-form-btn.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, ProductsFormComponent],
+  imports: [
+    RouterOutlet,
+    NavbarComponent,
+    ProductsFormComponent,
+    ContainerComponent,
+    ShowFormBtnComponent,
+  ],
   templateUrl: './app.component.html',
 })
 export class AppComponent {

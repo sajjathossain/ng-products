@@ -1,4 +1,12 @@
 <app-navbar (showForm)="toggleForm()" />
 <app-products-form [showForm]="showForm()" />
 
+<div class="h-dvh">
+  <app-container>
+    <app-show-form-btn
+      class="absolute z-20 bottom-4 right-0 hidden md:block"
+      (showForm)="toggleForm()"
+    />
+  </app-container>
+</div>
 <router-outlet />

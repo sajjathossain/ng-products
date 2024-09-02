@@ -1,5 +1,5 @@
-<div class="btm-nav md:hidden">
-  <div class="text-primary">
+<div class="btm-nav md:hidden my-2">
+  <div class="text-info">
     <svg
       width="24"
       height="24"
@@ -27,26 +27,12 @@
     </svg>
   </div>
 
-  <button (click)="showForm.emit(true)" class="text-primary">
-    <svg
-      viewBox="0 0 20 20"
-      stroke="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-      class="w-6 aspect-square"
-    >
-      <path
-        fill="currentColor"
-        fill-rule="evenodd"
-        d="M10 3a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H4a1 1 0 1 1 0-2h5V4a1 1 0 0 1 1-1"
-        clip-rule="evenodd"
-      />
-    </svg>
-  </button>
+  <app-show-form-btn (showForm)="showForm.emit($event)" />
 
   <div class="drawer-overlay">
     <input id="nav-drawer" type="checkbox" class="drawer-toggle w-fit" />
     <div class="drawer-content">
-      <label for="nav-drawer" class="drawer-button text-primary p-2">
+      <label for="nav-drawer" class="drawer-button btn btn-info btn-circle">
         <svg
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
