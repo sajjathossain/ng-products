@@ -20,10 +20,12 @@ export class ProductListComponent implements OnInit {
         const products = this.rxdbService.getCollection<ProductDocType>(
           this.collectionName,
         );
-        products.find().$.subscribe((result) => {
-          const mapped = result.map((item) => item._data);
-          this.products$.set(mapped);
-        });
+        products
+          .find({ sort: [{ createdAt: 'desc' }] })
+          .$.subscribe((result) => {
+            const mapped = result.map((item) => item._data);
+            this.products$.set(mapped);
+          });
       }
     });
   }
