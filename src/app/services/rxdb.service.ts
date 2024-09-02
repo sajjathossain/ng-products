@@ -7,6 +7,7 @@ import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
 import { isDevMode } from '@angular/core';
 import { productSchema } from '@/db/product.schema';
 import { BehaviorSubject } from 'rxjs';
+import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 
 const loadPlugins = async () => {
   addRxPlugin(RxDBQueryBuilderPlugin);
@@ -41,9 +42,18 @@ export class RxDBService {
       return this.rxdb;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let storage: any = getRxStorageDexie();
+
+    if (isDevMode()) {
+      storage = wrappedValidateAjvStorage({
+        storage: getRxStorageDexie(),
+      });
+    }
+
     this.rxdb = await createRxDatabase({
       name: dbName,
-      storage: getRxStorageDexie(),
+      storage,
       ignoreDuplicate: true,
     });
 
