@@ -1,5 +1,6 @@
 <div class="text-center text-base-content flex flex-col gap-3">
   <h1 class="text-3xl font-bold">Products</h1>
+  <app-products-search [products]="products$" />
 
   @if (products$().length === 0) {
     <div role="alert" class="alert alert-info w-full lg:w-1/3 mx-auto">

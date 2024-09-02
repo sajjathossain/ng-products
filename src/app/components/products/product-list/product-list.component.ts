@@ -4,12 +4,13 @@ import { Component, OnInit, effect, signal } from '@angular/core';
 import { RxDocumentData } from 'rxdb';
 import { filter, first } from 'rxjs';
 import { ProductCardComponent } from './product-card/product-card.component';
+import { ProductSearchComponent } from '../search/search.component';
 
 @Component({
   standalone: true,
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
-  imports: [ProductCardComponent],
+  imports: [ProductCardComponent, ProductSearchComponent],
 })
 export class ProductListComponent implements OnInit {
   private isDbReady = signal(false);
