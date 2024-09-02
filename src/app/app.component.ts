@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, signal } from '@angular/core';
+import { NgxSonnerToaster } from 'ngx-sonner';
 import { RouterOutlet } from '@angular/router';
 import { ContainerComponent, NavbarComponent } from '@/components/shared';
 import { ProductsFormComponent } from './components/products/form/form.component';
@@ -16,6 +17,7 @@ import { ProductListComponent } from './components/products/product-list/product
     ContainerComponent,
     ShowFormBtnComponent,
     ProductListComponent,
+    NgxSonnerToaster,
   ],
   templateUrl: './app.component.html',
 })
