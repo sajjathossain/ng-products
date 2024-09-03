@@ -41,7 +41,6 @@ export class ProductListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.products());
     this.rxdbService.dataBaseReady$
       .pipe(
         filter((ready) => !!ready),

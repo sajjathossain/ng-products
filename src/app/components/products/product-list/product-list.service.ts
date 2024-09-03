@@ -9,7 +9,7 @@ import { v4 as uuid } from 'uuid';
 @Injectable()
 export class ProductListService {
   private readonly collectionName = 'products';
-  constructor(private readonly rxdbService: RxDBService) { }
+  constructor(private readonly rxdbService: RxDBService) {}
 
   async createProduct({
     productForm,
@@ -72,6 +72,48 @@ export class ProductListService {
 
             const result = updated._data;
             resolve(result);
+          },
+        },
+        cancel: {
+          label: 'Cancel',
+          onClick: () => {
+            reject('canceled');
+          },
+        },
+      });
+    });
+
+    return res;
+  }
+
+  async deleteProduct({ id }: { id: string }) {
+    const collection = this.rxdbService.getCollection<ProductDocType>(
+      this.collectionName,
+    );
+
+    const query = collection.findOne({
+      selector: {
+        id: {
+          $eq: id,
+        },
+      },
+    });
+
+    const res = await new Promise<
+      RxDocumentData<ProductDocType> | 'failed' | 'canceled'
+    >((resolve, reject) => {
+      toast.warning('do you really want to delete this product?', {
+        action: {
+          label: 'Delete',
+          onClick: async () => {
+            const removed = await query.remove();
+            if (!removed?._data) {
+              return reject('failed');
+            }
+
+            if (removed._data) {
+              return resolve(removed._data);
+            }
           },
         },
         cancel: {
