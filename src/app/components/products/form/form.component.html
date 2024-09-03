@@ -3,10 +3,15 @@
     id="form-drawer"
     type="checkbox"
     class="drawer-toggle w-fit"
-    [checked]="showForm"
+    [checked]="showForm()"
   />
   <div class="drawer-side">
-    <label for="form-drawer" aria-label="close sidebar" class="drawer-overlay">
+    <label
+      for="form-drawer"
+      aria-label="close sidebar"
+      (click)="resetAndToggleForm()"
+      class="drawer-overlay"
+    >
     </label>
     <form
       [formGroup]="productForm"
@@ -109,7 +114,7 @@
         {{ productId() ? "Update" : "Submit" }}
       </button>
       <button
-        (click)="toggleForm.emit(false)"
+        (click)="resetAndToggleForm()"
         type="button"
         aria-label="close form"
         class="btn btn-neutral mt-2"

@@ -2,15 +2,7 @@ import { ContainerComponent } from '@/components/shared';
 import { RxDBService } from '@/services/rxdb.service';
 import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { toast } from 'ngx-sonner';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  TemplateRef,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -42,6 +34,16 @@ export class ProductsFormComponent implements OnInit {
     private formService: FormService,
     private communicationService: CommunicationService,
   ) {
+    this.communicationService.formBehaviorSubject$.subscribe((data) => {
+      if (!data) return null;
+
+      if (data.toggle) return this.showForm.set(true);
+
+      if (data.toggle === false) this.resetAndToggleForm();
+
+      return null;
+    });
+
     this.communicationService.productBehaviorSubject$.subscribe((data) => {
       if (!data) return null;
 
@@ -89,9 +91,7 @@ export class ProductsFormComponent implements OnInit {
       updateOn: 'blur',
     },
   );
-  @Input({ required: true }) showForm = false;
-  @Input() formContent!: TemplateRef<unknown>;
-  @Output() toggleForm = new EventEmitter<boolean>();
+  protected showForm = signal(false);
   private isDbReady = signal(false);
   protected productId = signal<string | null>(null);
 
@@ -112,7 +112,7 @@ export class ProductsFormComponent implements OnInit {
   }) {
     this.productForm.reset(params?.values ?? {});
     this.productId.set(params?.id ?? null);
-    this.toggleForm.emit(params?.toggle ?? false);
+    this.showForm.set(params?.toggle ?? false);
   }
 
   async handleUpdate() {
@@ -184,7 +184,7 @@ export class ProductsFormComponent implements OnInit {
       toast.error('Unable to create product');
     }
 
-    this.toggleForm.emit(true);
+    this.showForm.set(false);
   }
 
   convertToHTMLDate(date: string | Date | number) {
@@ -221,5 +221,10 @@ export class ProductsFormComponent implements OnInit {
       toggle: true,
     });
     return findOne;
+  }
+
+  toggleForm() {
+    const toggle = !this.showForm();
+    this.communicationService.toggleFormEmit(toggle);
   }
 }

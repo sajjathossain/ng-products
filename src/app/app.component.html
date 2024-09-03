@@ -1,14 +1,11 @@
 <ngx-sonner-toaster />
-<app-navbar (toggleForm)="toggleForm()" />
-<app-products-form [showForm]="showForm()" (toggleForm)="toggleForm()" />
+<app-navbar />
+<app-products-form />
 
 <div class="h-dvh w-full relative py-4 md:py-20">
   <app-container>
     <app-product-list />
   </app-container>
-  <app-show-form-btn
-    class="fixed bottom-6 right-28 hidden md:block"
-    (toggleForm)="toggleForm()"
-  />
+  <app-show-form-btn class="fixed bottom-6 right-28 hidden md:block" />
 </div>
 <router-outlet />

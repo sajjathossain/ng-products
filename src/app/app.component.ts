@@ -31,8 +31,4 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.rxdbService.initDB('tigerit-task');
   }
-
-  toggleForm() {
-    this.showForm.set(!this.showForm());
-  }
 }

@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { CommunicationService } from '@/services/communication.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-show-form-btn',
   template: `
     <button
-      (click)="toggleForm.emit(true)"
+      (click)="toggleForm()"
       class="flex items-center justify-center btn btn-primary btn-md"
     >
       <svg
@@ -25,5 +26,9 @@ import { Component, EventEmitter, Output } from '@angular/core';
   standalone: true,
 })
 export class ShowFormBtnComponent {
-  @Output() toggleForm = new EventEmitter<boolean>();
+  constructor(private readonly communicationService: CommunicationService) { }
+
+  toggleForm() {
+    this.communicationService.toggleFormEmit(true);
+  }
 }

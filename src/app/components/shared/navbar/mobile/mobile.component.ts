@@ -1,5 +1,5 @@
 import { TNavItem } from '@/lib/schemas';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ContainerComponent } from '../../container/container.component';
 import { ThemeSwitcherComponent } from '../../theme-switcher/theme-switcher.component';
@@ -21,6 +21,4 @@ export class MobileNavComponent {
     required: true,
   })
   navitems: TNavItem[] = [];
-
-  @Output() toggleForm = new EventEmitter<boolean>();
 }
