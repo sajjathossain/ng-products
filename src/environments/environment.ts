@@ -1,3 +1,3 @@
 export const environment = {
-  useMemoryDB: true,
+  useMemoryDB: false,
 };
