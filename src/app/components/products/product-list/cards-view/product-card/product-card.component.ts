@@ -4,11 +4,13 @@ import { Component, Input } from '@angular/core';
 import { RxDocumentData } from 'rxdb';
 import { toast } from 'ngx-sonner';
 import { CommunicationService } from '@/services/communication.service';
+import { ProductActionButtonsComponent } from '../../action-buttons/action-buttons.component';
 
 @Component({
   standalone: true,
   selector: 'app-product-card',
   templateUrl: './product-card.component.html',
+  imports: [ProductActionButtonsComponent],
 })
 export class ProductCardComponent {
   constructor(
