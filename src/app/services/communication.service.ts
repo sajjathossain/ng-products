@@ -24,4 +24,8 @@ export class CommunicationService {
   public updateProductEmit(value: string | undefined) {
     this.productBehaviorSubject.next({ updateId: value });
   }
+
+  public deleteProductEmit(value: string | undefined) {
+    this.productBehaviorSubject.next({ deleteId: value });
+  }
 }
