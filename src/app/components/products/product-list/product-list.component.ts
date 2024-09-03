@@ -6,6 +6,9 @@ import { filter, first } from 'rxjs';
 import { ProductSearchComponent } from '../search/search.component';
 import { ProductsCardsViewComponent } from './cards-view/cards-view.component';
 import { ProductsTableViewComponent } from './table-view/table-view.component';
+import { CommunicationService } from '@/services/communication.service';
+import { ProductListService } from './product-list.service';
+import { toast } from 'ngx-sonner';
 
 export type TRXProductType = RxDocumentData<ProductDocType>;
 
@@ -18,13 +21,18 @@ export type TRXProductType = RxDocumentData<ProductDocType>;
     ProductsTableViewComponent,
     ProductsCardsViewComponent,
   ],
+  providers: [ProductListService],
 })
 export class ProductListComponent implements OnInit {
   private isDbReady = signal(false);
   products = signal<TRXProductType[]>([]);
   private collectionName = 'products';
 
-  constructor(private rxdbService: RxDBService) {
+  constructor(
+    private rxdbService: RxDBService,
+    private readonly communicationService: CommunicationService,
+    private readonly productListService: ProductListService,
+  ) {
     effect(() => {
       if (this.isDbReady()) {
         const products = this.rxdbService.getCollection<ProductDocType>(
@@ -38,6 +46,16 @@ export class ProductListComponent implements OnInit {
           });
       }
     });
+
+    this.communicationService.productBehaviorSubject$.subscribe((data) => {
+      if (!data) return null;
+
+      if (data.deleteId) {
+        return this.deleteProduct(data.deleteId);
+      }
+
+      return null;
+    });
   }
 
   ngOnInit(): void {
@@ -47,5 +65,20 @@ export class ProductListComponent implements OnInit {
         first(),
       )
       .subscribe(() => this.isDbReady.set(true));
+  }
+
+  async deleteProduct(id: string) {
+    const result = await this.productListService.deleteProduct({ id });
+
+    switch (result) {
+      case 'canceled':
+        toast.error('Unable to delete product');
+        return;
+      case 'failed':
+        toast.error('Unable to delete product');
+        return;
+    }
+
+    toast.success(`Product deleted. title: ${result.name}`);
   }
 }
