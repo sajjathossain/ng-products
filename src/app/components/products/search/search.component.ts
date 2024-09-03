@@ -34,7 +34,8 @@ export class ProductSearchComponent {
       sort: [{ createdAt: 'desc' }],
       selector: {
         name: {
-          $regex: term,
+          $regex: `^.*${term}.*$`,
+          $options: 'i',
         },
       },
     });
