@@ -17,6 +17,10 @@ export class CommunicationService {
   private formBehaviorSubject = new BehaviorSubject<TFormBehaviorSubject>(null);
   public formBehaviorSubject$ = this.formBehaviorSubject.asObservable();
 
+  public toggleFormEmit(value: boolean) {
+    this.formBehaviorSubject.next({ toggle: value });
+  }
+
   public updateProductEmit(value: string | undefined) {
     this.productBehaviorSubject.next({ updateId: value });
   }
