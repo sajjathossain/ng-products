@@ -19,6 +19,7 @@
     "@angular/platform-browser": "^18.1.0",
     "@angular/platform-browser-dynamic": "^18.1.0",
     "@angular/router": "^18.1.0",
+    "@tanstack/angular-table": "^8.20.5",
     "@tanstack/angular-virtual": "^3.10.6",
     "ngx-sonner": "^2.0.2",
     "rxdb": "^15.32.0",

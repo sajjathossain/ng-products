@@ -29,6 +29,9 @@ dependencies:
   '@angular/router':
     specifier: ^18.1.0
     version: 18.2.2(@angular/common@18.2.2)(@angular/core@18.2.2)(@angular/platform-browser@18.2.2)(rxjs@7.8.1)
+  '@tanstack/angular-table':
+    specifier: ^8.20.5
+    version: 8.20.5(@angular/core@18.2.2)
   '@tanstack/angular-virtual':
     specifier: ^3.10.6
     version: 3.10.6(@angular/core@18.2.2)
@@ -3819,6 +3822,17 @@ packages:
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
     dev: true
 
+  /@tanstack/angular-table@8.20.5(@angular/core@18.2.2):
+    resolution: {integrity: sha512-VjfUVDS5qUSr3fo5y13QObNmM4w4fwUXzgmS3Q7l7iHtaemCCie4T3w0b4n5jRpskOZrWOHIF5HBszo9NMAycA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      '@angular/core': '>=17'
+    dependencies:
+      '@angular/core': 18.2.2(rxjs@7.8.1)(zone.js@0.14.10)
+      '@tanstack/table-core': 8.20.5
+      tslib: 2.7.0
+    dev: false
+
   /@tanstack/angular-virtual@3.10.6(@angular/core@18.2.2):
     resolution: {integrity: sha512-vgWY43CdsGvbbjv30ag1ZmzMVPxNsKPdtvyi/TK4NeUfDnWqXS8/zNnVpndpHonhqHCcVwdRxq85ZHDWVYv1gQ==}
     engines: {node: '>=12'}
@@ -3828,6 +3842,11 @@ packages:
       '@angular/core': 18.2.2(rxjs@7.8.1)(zone.js@0.14.10)
       '@tanstack/virtual-core': 3.10.6
       tslib: 2.7.0
+    dev: false
+
+  /@tanstack/table-core@8.20.5:
+    resolution: {integrity: sha512-P9dF7XbibHph2PFRz8gfBKEXEY/HJPOhym8CHmjF8y3q5mWpKx9xtZapXQUWCgkqvsK0R46Azuz+VaxD4Xl+Tg==}
+    engines: {node: '>=12'}
     dev: false
 
   /@tanstack/virtual-core@3.10.6:
