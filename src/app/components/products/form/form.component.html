@@ -34,22 +34,37 @@
           "
           formControlName="name"
         />
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text">
+
+        <div class="w-full">
+          <label class="label">
+            <span class="label-text-alt">
               Select a category
               <sup class="text-red-500 text-xs">&ast;</sup>
             </span>
+          </label>
+          <div class="dropdown w-full">
+            <input
+              class="input input-bordered w-full"
+              formControlName="category"
+              (keyup)="handleInput($event)"
+            />
+            <ul
+              tabindex="0"
+              class="dropdown-content menu bg-base-300 z-[1] w-full shadow"
+              [class.hidden]="!showCategorySelect()"
+            >
+              @for (item of keys(categories()); track $index) {
+                <li
+                  role="menuitem"
+                  (click)="selectCategory(item)"
+                  class="cursor-pointer p-2 hover:bg-primary hover:text-primary-content"
+                >
+                  {{ item }}
+                </li>
+              }
+            </ul>
           </div>
-          <select formControlName="category" class="select select-bordered">
-            <option disabled selected>Pick one</option>
-            <option>Star Wars</option>
-            <option>Harry Potter</option>
-            <option>Lord of the Rings</option>
-            <option>Planet of the Apes</option>
-            <option>Star Trek</option>
-          </select>
-        </label>
+        </div>
         <label class="label">
           <span class="label-text-alt">
             Price
@@ -79,10 +94,12 @@
             <sup class="text-red-500 text-xs">&ast;</sup>
           </span>
         </label>
+        {{ maxQuantity$.getValue() }}
         <input
           type="number"
           class="input input-bordered"
           formControlName="quantity"
+          [max]="maxQuantity$.getValue()"
           [class.input-error]="
             productForm.get('quantity')?.invalid &&
             (productForm.get('quantity')?.touched ||
