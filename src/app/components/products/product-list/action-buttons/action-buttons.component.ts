@@ -57,7 +57,6 @@ export class ProductActionButtonsComponent {
   }
 
   deleteProduct(id: string) {
-    console.log({ id });
     this.communicationService.deleteProductEmit(id);
   }
   /*
