@@ -32,9 +32,6 @@ dependencies:
   '@tanstack/angular-virtual':
     specifier: ^3.10.6
     version: 3.10.6(@angular/core@18.2.2)
-  gsap:
-    specifier: ^3.12.5
-    version: 3.12.5
   ngx-sonner:
     specifier: ^2.0.2
     version: 2.0.2(@angular/common@18.2.2)(@angular/core@18.2.2)
@@ -6458,10 +6455,6 @@ packages:
   /graphql@15.9.0:
     resolution: {integrity: sha512-GCOQdvm7XxV1S4U4CGrsdlEN37245eC8P9zaYCMr6K1BG0IPGy5lUwmJsEOGyl1GD6HXjOtl2keCP9asRBwNvA==}
     engines: {node: '>= 10.x'}
-    dev: false
-
-  /gsap@3.12.5:
-    resolution: {integrity: sha512-srBfnk4n+Oe/ZnMIOXt3gT605BX9x5+rh/prT2F1SsNJsU1XuMiP0E2aptW481OnonOGACZWBqseH5Z7csHxhQ==}
     dev: false
 
   /handle-thing@2.0.1:
