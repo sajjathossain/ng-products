@@ -1,6 +1,6 @@
 import { ContainerComponent } from '@/components/shared';
 import { RxDBService } from '@/services/rxdb.service';
-import { NgTemplateOutlet } from '@angular/common';
+import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { toast } from 'ngx-sonner';
 import {
   Component,
@@ -27,7 +27,12 @@ import { RxDocument } from 'rxdb';
 @Component({
   selector: 'app-products-form',
   templateUrl: './form.component.html',
-  imports: [ContainerComponent, ReactiveFormsModule, NgTemplateOutlet],
+  imports: [
+    ContainerComponent,
+    ReactiveFormsModule,
+    NgTemplateOutlet,
+    DatePipe,
+  ],
   standalone: true,
   providers: [FormService],
 })
@@ -47,6 +52,8 @@ export class ProductsFormComponent implements OnInit {
       return null;
     });
   }
+
+  protected readonly datePipe = new DatePipe('en-US');
 
   productForm = new FormGroup(
     {
@@ -70,10 +77,13 @@ export class ProductsFormComponent implements OnInit {
         validators: [Validators.required, Validators.min(1)],
         updateOn: 'blur',
       }),
-      createdAt: new FormControl(new Date().toISOString(), {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(3)],
-      }),
+      createdAt: new FormControl(
+        this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
+        {
+          nonNullable: true,
+          validators: [Validators.required, Validators.minLength(3)],
+        },
+      ),
     },
     {
       updateOn: 'blur',
@@ -164,7 +174,10 @@ export class ProductsFormComponent implements OnInit {
 
     if (result) {
       this.productForm.reset();
-      toast.success('Product created successfully!');
+      toast.success('Product created successfully!', {
+        dismissible: true,
+        duration: 1000,
+      });
     }
 
     if (!result) {
@@ -172,6 +185,12 @@ export class ProductsFormComponent implements OnInit {
     }
 
     this.toggleForm.emit(true);
+  }
+
+  convertToHTMLDate(date: string | Date | number) {
+    const parsed = new Date(date);
+    const piped = this.datePipe.transform(parsed, 'yyyy-MM-dd');
+    return piped;
   }
 
   async updateProduct(data: IUpdateProductBehaviorSubject) {
@@ -193,7 +212,14 @@ export class ProductsFormComponent implements OnInit {
       return toast.error('Unable to find product');
     }
 
-    this.resetAndToggleForm({ values: product, id: product.id!, toggle: true });
+    this.resetAndToggleForm({
+      values: {
+        ...product,
+        createdAt: this.convertToHTMLDate(product.createdAt),
+      },
+      id: product.id!,
+      toggle: true,
+    });
     return findOne;
   }
 }
