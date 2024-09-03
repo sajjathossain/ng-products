@@ -10,11 +10,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { filter, first } from 'rxjs';
-import { FormService } from './form.service';
 import { CommunicationService } from '@/services/communication.service';
 import { IUpdateProductBehaviorSubject } from '@/lib/schemas/communication';
 import { ProductDocType } from '@/db/product.schema';
 import { RxDocument } from 'rxdb';
+import { ProductListService } from '../product-list/product-list.service';
 
 @Component({
   selector: 'app-products-form',
@@ -26,13 +26,13 @@ import { RxDocument } from 'rxdb';
     DatePipe,
   ],
   standalone: true,
-  providers: [FormService],
+  providers: [ProductListService],
 })
 export class ProductsFormComponent implements OnInit {
   constructor(
     private rxdbService: RxDBService,
-    private formService: FormService,
     private communicationService: CommunicationService,
+    private productListService: ProductListService,
   ) {
     this.communicationService.formBehaviorSubject$.subscribe((data) => {
       if (!data) return null;
@@ -121,40 +121,20 @@ export class ProductsFormComponent implements OnInit {
       name: this.productForm.value.name ?? 'default',
       price: this.productForm.value.price ?? 1,
       createdAt: this.productForm.value.createdAt ?? new Date().toISOString(),
-    };
+    } as ProductDocType;
 
-    const collection =
-      this.rxdbService.getCollection<ProductDocType>('products');
-
-    const query = collection.findOne({
-      selector: {
-        id: {
-          $eq: this.productId(),
-        },
-      },
+    const result = await this.productListService.updateProduct({
+      id: this.productId()!,
+      values,
     });
 
-    toast.warning('do you really want to update this product?', {
-      action: {
-        label: 'Update',
-        onClick: async () => {
-          const updated = await query.patch(values);
-          if (!updated?._data) {
-            toast.error('Unable to update product');
-            return;
-          }
+    if (result === 'failed' || result === 'canceled') {
+      toast.error(`Product update ${result}`);
+    } else {
+      toast.success(`Product updated.`);
+    }
 
-          if (updated._data) {
-            toast.success(`Product updated. title: ${updated._data.name}`);
-            this.resetAndToggleForm();
-          }
-        },
-      },
-      cancel: {
-        label: 'Cancel',
-        onClick: () => toast.success('good choice'),
-      },
-    });
+    return this.resetAndToggleForm();
   }
 
   async handleSubmit() {
@@ -167,7 +147,7 @@ export class ProductsFormComponent implements OnInit {
       quantity: this.productForm.value.quantity!,
     };
 
-    const result = await this.formService.createProduct({
+    const result = await this.productListService.createProduct({
       productForm: this.productForm,
       values,
     });
