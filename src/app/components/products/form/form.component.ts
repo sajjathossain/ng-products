@@ -1,15 +1,21 @@
 import { ContainerComponent } from '@/components/shared';
 import { RxDBService } from '@/services/rxdb.service';
-import { DatePipe, NgTemplateOutlet } from '@angular/common';
+import { DatePipe, KeyValuePipe, NgTemplateOutlet } from '@angular/common';
 import { toast } from 'ngx-sonner';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, effect, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { filter, first } from 'rxjs';
+import {
+  BehaviorSubject,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  first,
+} from 'rxjs';
 import { CommunicationService } from '@/services/communication.service';
 import { IUpdateProductBehaviorSubject } from '@/lib/schemas/communication';
 import { ProductDocType } from '@/db/product.schema';
@@ -26,7 +32,7 @@ import { ProductListService } from '../product-list/product-list.service';
     DatePipe,
   ],
   standalone: true,
-  providers: [ProductListService],
+  providers: [ProductListService, KeyValuePipe],
 })
 export class ProductsFormComponent implements OnInit {
   constructor(
@@ -53,7 +59,25 @@ export class ProductsFormComponent implements OnInit {
 
       return null;
     });
+
+    effect(() => {
+      if (this.isDbReady()) {
+        const products =
+          this.rxdbService.getCollection<ProductDocType>('products');
+        products
+          .find({ sort: [{ createdAt: 'desc' }] })
+          .$.subscribe((result) => {
+            const obj = this.convertRxDocumentToCategoryObject(result);
+
+            this.categories.set(obj);
+          });
+      }
+    });
   }
+
+  showCategorySelect = signal(false);
+  keys = Object.keys;
+  categories = signal<Record<string, number>>({});
 
   protected readonly datePipe = new DatePipe('en-US');
 
@@ -94,6 +118,8 @@ export class ProductsFormComponent implements OnInit {
   protected showForm = signal(false);
   private isDbReady = signal(false);
   protected productId = signal<string | null>(null);
+  protected input$ = new BehaviorSubject<string>('');
+  protected maxQuantity$ = new BehaviorSubject<number>(10);
 
   ngOnInit(): void {
     this.rxdbService.dataBaseReady$
@@ -102,6 +128,12 @@ export class ProductsFormComponent implements OnInit {
         first(),
       )
       .subscribe(() => this.isDbReady.set(true));
+
+    this.input$
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((term) => {
+        this.filterByCategory(term);
+      });
   }
 
   resetAndToggleForm(params?: {
@@ -201,6 +233,50 @@ export class ProductsFormComponent implements OnInit {
       toggle: true,
     });
     return findOne;
+  }
+
+  convertRxDocumentToCategoryObject(data: RxDocument<ProductDocType>[]) {
+    const map = new Map<string, number>();
+    data.forEach((item) => {
+      const quantity = map.get(item.category) ?? 0;
+      map.set(item.category, quantity + item.quantity);
+    });
+
+    const obj = Object.fromEntries(map);
+    return obj;
+  }
+
+  async filterByCategory(category: string) {
+    const collection =
+      this.rxdbService.getCollection<ProductDocType>('products');
+    const query = collection.find({
+      selector: {
+        category: {
+          $regex: `^.*${category}.*$`,
+          $options: 'i',
+        },
+      },
+      sort: [{ createdAt: 'desc' }],
+    });
+
+    const result = await query.exec();
+    const shouldShow = result.length > 0 && this.input$.getValue().length > 0;
+    this.showCategorySelect.set(shouldShow);
+    const mapped = this.convertRxDocumentToCategoryObject(result);
+    const current: number | undefined = mapped[category.trim()];
+    this.categories.set(mapped);
+    this.maxQuantity$.next(10 - (current ?? 0));
+  }
+
+  selectCategory(category: string) {
+    this.productForm.get('category')?.setValue(category);
+    this.input$.next(category);
+    this.showCategorySelect.set(false);
+  }
+
+  handleInput(event: Event) {
+    const term = (event.target as HTMLInputElement).value;
+    this.input$.next(term);
   }
 
   toggleForm() {
