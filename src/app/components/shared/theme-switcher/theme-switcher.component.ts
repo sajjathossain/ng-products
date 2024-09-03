@@ -48,7 +48,10 @@ export class ThemeSwitcherComponent implements OnInit {
     const local = JSON.parse(localStorage.getItem('theme') as string);
     this.theme.set(local);
     if (!local || !local.activeTheme) {
-      this.selector.setAttribute('data-theme', this.theme().activeTheme);
+      this.selector.setAttribute(
+        'data-theme',
+        this.theme() ? this.theme().activeTheme : 'default',
+      );
       return;
     }
 
