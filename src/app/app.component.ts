@@ -6,6 +6,7 @@ import { ProductsFormComponent } from './components/products/form/form.component
 import { ShowFormBtnComponent } from './components/shared/show-form-btn/show-form-btn.component';
 import { RxDBService } from './services/rxdb.service';
 import { ProductListComponent } from './components/products/product-list/product-list.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -22,13 +23,17 @@ import { ProductListComponent } from './components/products/product-list/product
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-  title = 'tiger-it-task';
   showForm = signal(false);
   @Output() toggle = new EventEmitter<boolean>();
 
-  constructor(private rxdbService: RxDBService) { }
+  constructor(
+    private rxdbService: RxDBService,
+    private readonly titleService: Title,
+  ) {
+    this.titleService.setTitle('NG Products');
+  }
 
   ngOnInit(): void {
-    this.rxdbService.initDB('tigerit-task');
+    this.rxdbService.initDB('ng-products');
   }
 }
