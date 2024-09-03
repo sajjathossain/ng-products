@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { RxCollection, RxDatabase, addRxPlugin, createRxDatabase } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
+import { getRxStorageMemory } from 'rxdb/plugins/storage-memory';
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
@@ -8,6 +9,8 @@ import { isDevMode } from '@angular/core';
 import { productSchema } from '@/db/product.schema';
 import { BehaviorSubject } from 'rxjs';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
+import { environment } from 'environments/environment';
+import { disableWarnings } from 'rxdb/plugins/dev-mode';
 
 const loadPlugins = async () => {
   addRxPlugin(RxDBQueryBuilderPlugin);
@@ -15,6 +18,7 @@ const loadPlugins = async () => {
 
   if (isDevMode()) {
     addRxPlugin(RxDBDevModePlugin);
+    disableWarnings();
   }
 };
 
@@ -46,9 +50,17 @@ export class RxDBService {
     let storage: any = getRxStorageDexie();
 
     if (isDevMode()) {
-      storage = wrappedValidateAjvStorage({
-        storage: getRxStorageDexie(),
-      });
+      if (environment.useMemoryDB) {
+        storage = wrappedValidateAjvStorage({
+          storage: getRxStorageMemory(),
+        });
+      }
+
+      if (!environment.useMemoryDB) {
+        storage = wrappedValidateAjvStorage({
+          storage: getRxStorageDexie(),
+        });
+      }
     }
 
     this.rxdb = await createRxDatabase({
