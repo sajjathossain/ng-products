@@ -292,12 +292,15 @@ export class ProductsFormComponent implements OnInit {
     this.categories.set(mapped);
 
     let max = 10 - (current ?? 0);
-    this.productId$.subscribe(() => {
-      const itemValue = Number(this.getValue('quantity'));
-      const isItemValueMoreThanMax = itemValue > max;
+    this.productId$.subscribe((result) => {
+      if (result) {
+        const itemValue = Number(this.getValue('quantity'));
+        const minusCurrent = current - itemValue;
+        const afterCalculation = 10 - minusCurrent;
 
-      max = isItemValueMoreThanMax ? itemValue : max;
-      this.maxQuantity$.next(max);
+        max = isNaN(afterCalculation) ? 10 : afterCalculation;
+      }
+      this.maxQuantity$.next(max ?? 10);
     });
   }
 
