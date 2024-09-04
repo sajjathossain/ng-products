@@ -1,7 +1,4 @@
-import {
-  TFormBehaviorSubject,
-  TProductBehaviorSubject,
-} from '@/lib/schemas/communication';
+import { TFormBehaviorSubject, TProductBehaviorSubject } from '@/lib/types';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 

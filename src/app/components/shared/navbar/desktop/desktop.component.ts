@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ContainerComponent } from '../../container/container.component';
-import { TNavItem } from '@/lib/schemas';
+import { TNavItem } from '@/lib/types';
 import { RouterModule } from '@angular/router';
 import { ThemeSwitcherComponent } from '../../theme-switcher/theme-switcher.component';
 

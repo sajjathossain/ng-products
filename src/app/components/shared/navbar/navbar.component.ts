@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MobileNavComponent } from './mobile/mobile.component';
-import { TNavItem } from '@/lib/schemas';
+import { TNavItem } from '@/lib/types';
 import { ContainerComponent } from '../container/container.component';
 import { DesktopNavComponent } from './desktop/desktop.component';
 import { NgTemplateOutlet } from '@angular/common';

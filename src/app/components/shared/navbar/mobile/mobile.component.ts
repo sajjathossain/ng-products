@@ -1,4 +1,4 @@
-import { TNavItem } from '@/lib/schemas';
+import { TNavItem } from '@/lib/types';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ContainerComponent } from '../../container/container.component';
