@@ -28,6 +28,9 @@ export const productSchema = {
       type: 'number',
       minimum: 1,
     },
+    image: {
+      type: 'string',
+    },
     category: {
       type: 'string',
       minLength: 1,
