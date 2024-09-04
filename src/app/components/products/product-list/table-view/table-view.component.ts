@@ -32,7 +32,7 @@ export class ProductsTableViewComponent {
         const value = cell.getValue();
         return `
           <div class="avatar">
-            <div class="mask mask-squircle h-12 w-12">
+            <div class="mask mask-squircle h-12 w-12 ${!value?.length ? 'bg-base-200 group-hover:bg-base-300' : ''}">
               <img
                 src="${value?.length ? value : '/default.png'}"
                 alt="Avatar Tailwind CSS Component" />
@@ -49,15 +49,28 @@ export class ProductsTableViewComponent {
     }),
     columnHelper.accessor('quantity', {
       header: 'Quantity',
+      cell: ({ cell }) => `
+        <p class="text-end">${cell.getValue()}</p>
+      `,
     }),
     columnHelper.accessor('price', {
       id: 'unitPrice',
       header: 'Unit Price',
+      cell: ({ cell }) => `
+        <p class="text-end">${cell.getValue()}</p>
+      `,
     }),
     columnHelper.accessor('price', {
       header: 'Total',
-      cell: ({ row }) =>
-        Number(row.getValue('quantity')) * Number(row.getValue('price')),
+      cell: ({ row }) => `
+        <p class="text-end">${Number(row.getValue('quantity')) * Number(row.getValue('price'))}</p>
+      `,
+      footer: () => {
+        const total = this.products().reduce((acc, product) => {
+          return acc + product.quantity * product.price;
+        }, 0);
+        return `<p class="text-end">Total Price: ${total}</p>`;
+      },
     }),
     columnHelper.display({
       id: 'id',
@@ -75,6 +88,7 @@ export class ProductsTableViewComponent {
     data: this.products(),
     columns: this.deaultColumns,
     getCoreRowModel: getCoreRowModel(),
+    pageCount: 10,
     debugTable: true,
   }));
 }
