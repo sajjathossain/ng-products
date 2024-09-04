@@ -1,4 +1,4 @@
-import { ProductDocType } from '@/db/product.schema';
+import { ProductDocType } from '@/db/product/schema';
 import { RxDBService } from '@/services/rxdb.service';
 import { Component, Input, WritableSignal, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';

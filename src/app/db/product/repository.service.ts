@@ -1,4 +1,4 @@
-import { ProductDocType } from '@/db/product.schema';
+import { ProductDocType } from '@/db/product/schema';
 import { RxDBService } from '@/services/rxdb.service';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -7,9 +7,9 @@ import { RxDocumentData } from 'rxdb';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
-export class ProductListService {
+export class ProductRepositoryService {
   private readonly collectionName = 'products';
-  constructor(private readonly rxdbService: RxDBService) {}
+  constructor(private readonly rxdbService: RxDBService) { }
 
   async createProduct({
     productForm,

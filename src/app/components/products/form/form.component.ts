@@ -18,9 +18,9 @@ import {
 } from 'rxjs';
 import { CommunicationService } from '@/services/communication.service';
 import { IUpdateProductBehaviorSubject } from '@/lib/schemas/communication';
-import { ProductDocType } from '@/db/product.schema';
+import { ProductDocType } from '@/db/product/schema';
 import { RxDocument } from 'rxdb';
-import { ProductListService } from '../product-list/product-list.service';
+import { ProductRepositoryService } from '@/db/product/repository.service';
 
 @Component({
   selector: 'app-products-form',
@@ -32,13 +32,13 @@ import { ProductListService } from '../product-list/product-list.service';
     DatePipe,
   ],
   standalone: true,
-  providers: [ProductListService, KeyValuePipe],
+  providers: [ProductRepositoryService, KeyValuePipe],
 })
 export class ProductsFormComponent implements OnInit {
   constructor(
     private rxdbService: RxDBService,
     private communicationService: CommunicationService,
-    private productListService: ProductListService,
+    private productRepositoryService: ProductRepositoryService,
   ) {
     this.communicationService.formBehaviorSubject$.subscribe((data) => {
       if (!data) return null;
@@ -155,7 +155,7 @@ export class ProductsFormComponent implements OnInit {
       createdAt: this.productForm.value.createdAt ?? new Date().toISOString(),
     } as ProductDocType;
 
-    const result = await this.productListService.updateProduct({
+    const result = await this.productRepositoryService.updateProduct({
       id: this.productId()!,
       values,
     });
@@ -179,7 +179,7 @@ export class ProductsFormComponent implements OnInit {
       quantity: this.productForm.value.quantity!,
     };
 
-    const result = await this.productListService.createProduct({
+    const result = await this.productRepositoryService.createProduct({
       productForm: this.productForm,
       values,
     });

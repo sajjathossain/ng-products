@@ -1,4 +1,4 @@
-import { ProductDocType } from '@/db/product.schema';
+import { ProductDocType } from '@/db/product/schema';
 import { RxDBService } from '@/services/rxdb.service';
 import { Component, Input } from '@angular/core';
 import { RxDocumentData } from 'rxdb';
@@ -16,7 +16,7 @@ export class ProductCardComponent {
   constructor(
     private rxdb: RxDBService,
     private communicationService: CommunicationService,
-  ) {}
+  ) { }
 
   private readonly collectionName = 'products';
   @Input({ required: true }) product!: RxDocumentData<ProductDocType>;

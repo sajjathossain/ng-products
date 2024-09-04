@@ -1,4 +1,4 @@
-import { ProductDocType } from '@/db/product.schema';
+import { ProductDocType } from '@/db/product/schema';
 import { RxDBService } from '@/services/rxdb.service';
 import { Component, OnInit, effect, signal } from '@angular/core';
 import { RxDocumentData } from 'rxdb';
@@ -7,8 +7,8 @@ import { ProductSearchComponent } from '../search/search.component';
 import { ProductsCardsViewComponent } from './cards-view/cards-view.component';
 import { ProductsTableViewComponent } from './table-view/table-view.component';
 import { CommunicationService } from '@/services/communication.service';
-import { ProductListService } from './product-list.service';
 import { toast } from 'ngx-sonner';
+import { ProductRepositoryService } from '@/db/product/repository.service';
 
 export type TRXProductType = RxDocumentData<ProductDocType>;
 
@@ -21,7 +21,7 @@ export type TRXProductType = RxDocumentData<ProductDocType>;
     ProductsTableViewComponent,
     ProductsCardsViewComponent,
   ],
-  providers: [ProductListService],
+  providers: [ProductRepositoryService],
 })
 export class ProductListComponent implements OnInit {
   private isDbReady = signal(false);
@@ -31,7 +31,7 @@ export class ProductListComponent implements OnInit {
   constructor(
     private rxdbService: RxDBService,
     private readonly communicationService: CommunicationService,
-    private readonly productListService: ProductListService,
+    private readonly productRepositoryService: ProductRepositoryService,
   ) {
     effect(() => {
       if (this.isDbReady()) {
@@ -68,7 +68,7 @@ export class ProductListComponent implements OnInit {
   }
 
   async deleteProduct(id: string) {
-    const result = await this.productListService.deleteProduct({ id });
+    const result = await this.productRepositoryService.deleteProduct({ id });
 
     switch (result) {
       case 'canceled':

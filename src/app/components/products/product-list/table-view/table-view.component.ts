@@ -1,4 +1,4 @@
-import { ProductDocType } from '@/db/product.schema';
+import { ProductDocType } from '@/db/product/schema';
 import { DatePipe } from '@angular/common';
 import { Component, Input, WritableSignal } from '@angular/core';
 import {
