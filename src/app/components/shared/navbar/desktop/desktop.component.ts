@@ -1,6 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { ContainerComponent } from '../../container/container.component';
-import { TNavItem } from '@/lib/types';
 import { RouterModule } from '@angular/router';
 import { ThemeSwitcherComponent } from '../../theme-switcher/theme-switcher.component';
 
@@ -10,6 +9,4 @@ import { ThemeSwitcherComponent } from '../../theme-switcher/theme-switcher.comp
   templateUrl: './desktop.component.html',
   imports: [ContainerComponent, RouterModule, ThemeSwitcherComponent],
 })
-export class DesktopNavComponent {
-  @Input({ required: true }) navitems: TNavItem[] = [];
-}
+export class DesktopNavComponent { }

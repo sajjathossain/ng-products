@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MobileNavComponent } from './mobile/mobile.component';
-import { TNavItem } from '@/lib/types';
 import { ContainerComponent } from '../container/container.component';
 import { DesktopNavComponent } from './desktop/desktop.component';
 import { NgTemplateOutlet } from '@angular/common';
@@ -25,9 +24,4 @@ import { NgTemplateOutlet } from '@angular/common';
 })
 export class NavbarComponent {
   title = 'Products';
-
-  navitems: TNavItem[] = [
-    { title: 'Home', link: '/' },
-    { title: 'About', link: '/about' },
-  ];
 }

@@ -16,17 +16,6 @@
       Products</a
     >
   </div>
-  <div>
-    <ul class="menu menu-horizontal px-1">
-      @for (item of navitems; track $index) {
-        <li>
-          <a [routerLink]="item.link" routerLinkActive="text-gray-200">
-            {{ item.title }}
-          </a>
-        </li>
-      }
-    </ul>
-  </div>
   <app-theme-switcher />
 </div>
 
