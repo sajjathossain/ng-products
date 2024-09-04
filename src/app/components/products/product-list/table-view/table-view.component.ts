@@ -26,6 +26,21 @@ export class ProductsTableViewComponent {
   @Input() products!: WritableSignal<TProductType[]>;
 
   deaultColumns = [
+    columnHelper.accessor('image', {
+      header: 'Image',
+      cell: ({ cell }) => {
+        const value = cell.getValue();
+        return `
+          <div class="avatar">
+            <div class="mask mask-squircle h-12 w-12">
+              <img
+                src="${value?.length ? value : '/default.png'}"
+                alt="Avatar Tailwind CSS Component" />
+            </div>
+          </div>
+        `;
+      },
+    }),
     columnHelper.accessor('name', {
       header: 'Name',
     }),
@@ -34,6 +49,10 @@ export class ProductsTableViewComponent {
     }),
     columnHelper.accessor('quantity', {
       header: 'Quantity',
+    }),
+    columnHelper.accessor('price', {
+      id: 'unitPrice',
+      header: 'Unit Price',
     }),
     columnHelper.accessor('price', {
       header: 'Total',
