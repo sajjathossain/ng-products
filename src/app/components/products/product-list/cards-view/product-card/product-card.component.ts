@@ -11,6 +11,11 @@ import { ProductActionButtonsComponent } from '../../action-buttons/action-butto
   selector: 'app-product-card',
   templateUrl: './product-card.component.html',
   imports: [ProductActionButtonsComponent],
+  styles: `
+    :host {
+      @apply h-fit;
+    }
+  `,
 })
 export class ProductCardComponent {
   constructor(
