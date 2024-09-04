@@ -17,7 +17,7 @@ import {
   first,
 } from 'rxjs';
 import { CommunicationService } from '@/services/communication.service';
-import { IUpdateProductBehaviorSubject } from '@/lib/schemas/communication';
+import { IUpdateProductBehaviorSubject } from '@/lib/types';
 import { ProductDocType } from '@/db/product/schema';
 import { RxDocument } from 'rxdb';
 import { ProductRepositoryService } from '@/db/product/repository.service';
