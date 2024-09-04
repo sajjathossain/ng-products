@@ -1,45 +1,32 @@
-<!-- <div class="card bg-base-100 image-full w-full shadow-xl relative z-10">
-  <figure>
-  </figure>
-  <div class="card-body">
-    <h2 class="card-title">{{ product.name }}</h2>
-    <p>
-      {{
-        product.description?.length
-          ? product.description
-          : "No description available"
-      }}
-    </p>
-    <div class="card-actions justify-end">
-      <app-product-action-buttons [id]="product.id!" />
-    </div>
-  </div>
-</div> -->
-<div
-  class="card card-compact bg-base-300 h-96 w-full shadow-xl overflow-hidden"
->
-  <figure class="overflow-hidden w-full relative">
+<div class="card card-compact bg-base-300 h-96 w-full shadow-xl">
+  <figure class="overflow-hidden w-full relative h-fit">
     <img
-      [src]="
-        product.image?.length
-          ? product.image!
-          : 'https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp'
-      "
+      [src]="product.image?.length ? product.image! : '/default.png'"
       width="400"
       height="400"
-      class="w-full overflow-hidden"
+      class="w-full aspect-square overflow-clip p-4"
       [alt]="product.name"
     />
   </figure>
-  <div class="card-body">
-    <h2 class="card-title">{{ product.name }}</h2>
-    <p>
-      {{
-        product.description?.length
-          ? product.description
-          : "No description available"
-      }}
-    </p>
+  <div class="card-body space-y-2">
+    <div class="card-title justify-between">
+      <h2>{{ product.name }}</h2>
+      <h6 class="text-sm badge badge-neutral w-12">
+        {{ product.category }}
+      </h6>
+    </div>
+    @if (product.description?.length) {
+      <p>
+        {{ product.description }}
+      </p>
+    }
+    <span class="flex w-full gap-2">
+      <p class="badge badge-primary">Quantity: {{ product.quantity }}</p>
+      <p class="badge badge-primary">Price: {{ product.price }}</p>
+      <p class="badge badge-primary">
+        Total: {{ num(product.price) * num(product.quantity) }}
+      </p>
+    </span>
     <div class="card-actions justify-end">
       <app-product-action-buttons [id]="product.id!" />
     </div>

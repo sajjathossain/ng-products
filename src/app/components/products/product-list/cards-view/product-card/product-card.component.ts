@@ -19,6 +19,7 @@ export class ProductCardComponent {
   ) {}
 
   private readonly collectionName = 'products';
+  protected readonly num = Number;
   @Input({ required: true }) product!: RxDocumentData<ProductDocType>;
 
   udpateProduct(id: string) {
