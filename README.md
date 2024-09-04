@@ -1,17 +1,12 @@
 <h1 align="center">NG Products</h1>
 
-<details>
-  <summary>
-    Technologies
-  </summary>
+## Technologies
 
-    - [Angular](https://angular.io/)
-    - [RxDB](https://rxdb.info/)
-    - [@tanstack/table](https://tanstack.com/table)
-    - [@tanstack/virtual](https://tanstack.com/virtual)
-    - [daisyUI](https://daisyui.com/)
-
-</details>
+- [RxDB](https://rxdb.info/)
+- [@tanstack/table](https://tanstack.com/table)
+- [@tanstack/virtual](https://tanstack.com/virtual)
+- [daisyUI](https://daisyui.com/)
+- [ngx-sonner](https://github.com/tutkli/ngx-sonner)
 
 ## Getting Started
 
