@@ -62,7 +62,7 @@ export class RxDBService {
 
     this.rxdb = await createRxDatabase({
       name: dbName,
-      password: 'random-ng-proudct-password',
+      password: 'topSecretPassword',
       storage,
       ignoreDuplicate: true,
     });

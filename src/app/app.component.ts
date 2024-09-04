@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { ContainerComponent, NavbarComponent } from '@/components/shared';
 import { ProductsFormComponent } from './components/products/form/form.component';
 import { ShowFormBtnComponent } from './components/shared/show-form-btn/show-form-btn.component';
-import { RxDBService } from './services/rxdb.service';
+import { RxDBService } from './db/rxdb.service';
 import { ProductListComponent } from './components/products/product-list/product-list.component';
 import { Title } from '@angular/platform-browser';
 

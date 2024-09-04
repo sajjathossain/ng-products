@@ -1,5 +1,5 @@
 import { ProductDocType } from '@/db/product/schema';
-import { RxDBService } from '@/services/rxdb.service';
+import { RxDBService } from '@/db/rxdb.service';
 import { Component, Input } from '@angular/core';
 import { RxDocumentData } from 'rxdb';
 import { toast } from 'ngx-sonner';

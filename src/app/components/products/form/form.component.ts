@@ -1,5 +1,5 @@
 import { ContainerComponent } from '@/components/shared';
-import { RxDBService } from '@/services/rxdb.service';
+import { RxDBService } from '@/db/rxdb.service';
 import { DatePipe, KeyValuePipe, NgTemplateOutlet } from '@angular/common';
 import { toast } from 'ngx-sonner';
 import { Component, OnInit, effect, signal } from '@angular/core';

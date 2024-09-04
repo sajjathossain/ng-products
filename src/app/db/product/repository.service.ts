@@ -1,5 +1,5 @@
 import { ProductDocType } from '@/db/product/schema';
-import { RxDBService } from '@/services/rxdb.service';
+import { RxDBService } from '@/db/rxdb.service';
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { toast } from 'ngx-sonner';
