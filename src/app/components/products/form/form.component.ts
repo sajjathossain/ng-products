@@ -119,7 +119,7 @@ export class ProductsFormComponent implements OnInit {
   );
   protected showForm = signal(false);
   private isDbReady = signal(false);
-  protected productId = signal<string | null>(null);
+  protected productId$ = new BehaviorSubject<string | null>(null);
   protected input$ = new BehaviorSubject<string>('');
   protected maxQuantity$ = new BehaviorSubject<number>(10);
 
@@ -145,7 +145,8 @@ export class ProductsFormComponent implements OnInit {
     toggle: boolean;
   }) {
     this.productForm.reset(params?.values ?? {});
-    this.productId.set(params?.id ?? null);
+    this.productId$.next(params?.id ?? null);
+    this.maxQuantity$.next(10);
     this.showForm.set(params?.toggle ?? false);
   }
 
@@ -158,7 +159,7 @@ export class ProductsFormComponent implements OnInit {
     } as ProductDocType;
 
     const result = await this.productRepositoryService.updateProduct({
-      id: this.productId()!,
+      id: this.productId$.getValue()!,
       values,
     });
 
@@ -225,6 +226,7 @@ export class ProductsFormComponent implements OnInit {
     if (!product) {
       return toast.error('Unable to find product');
     }
+    this.filterByCategory(product.category);
 
     this.resetAndToggleForm({
       values: {
@@ -242,6 +244,13 @@ export class ProductsFormComponent implements OnInit {
     const isInvalid = control?.invalid && (control?.touched || control?.dirty);
 
     return isInvalid;
+  }
+
+  getValue(field: string) {
+    const control = this.productForm.get(field);
+    const value = control?.value;
+
+    return value;
   }
 
   remaingCharactersCount(field: string, maxLength: number) {
@@ -281,7 +290,15 @@ export class ProductsFormComponent implements OnInit {
     const mapped = this.convertRxDocumentToCategoryObject(result);
     const current: number | undefined = mapped[category.trim()];
     this.categories.set(mapped);
-    this.maxQuantity$.next(10 - (current ?? 0));
+
+    let max = 10 - (current ?? 0);
+    this.productId$.subscribe(() => {
+      const itemValue = Number(this.getValue('quantity'));
+      const isItemValueMoreThanMax = itemValue > max;
+
+      max = isItemValueMoreThanMax ? itemValue : max;
+      this.maxQuantity$.next(max);
+    });
   }
 
   selectCategory(category: string) {

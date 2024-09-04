@@ -15,31 +15,33 @@
     </label>
     <form
       [formGroup]="productForm"
-      (submit)="productId() ? handleUpdate() : handleSubmit()"
+      (submit)="productId$.getValue() ? handleUpdate() : handleSubmit()"
       class="menu bg-base-200 text-base-content min-h-full w-full md:w-1/3 p-4"
     >
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">
-            Product Name
-            <sup class="text-red-500 text-xs">&ast;</sup>
-          </span>
-        </label>
-        <input
-          type="text"
-          class="input input-bordered"
-          [class.input-error]="isFieldInvalid('name')"
-          formControlName="name"
-        />
+      <div class="form-control space-y-2">
+        <span>
+          <label class="label">
+            <span class="label-text">
+              Product Name
+              <sup class="text-red-500 text-xs">&ast;</sup>
+            </span>
+          </label>
+          <input
+            type="text"
+            class="input input-bordered w-full"
+            [class.input-error]="isFieldInvalid('name')"
+            formControlName="name"
+          />
+        </span>
 
-        <div class="w-full">
+        <span>
           <label class="label">
             <span class="label-text-alt">
               Select a category
               <sup class="text-red-500 text-xs">&ast;</sup>
             </span>
           </label>
-          <div class="dropdown w-full">
+          <span class="dropdown w-full">
             <input
               class="input input-bordered w-full"
               formControlName="category"
@@ -61,71 +63,88 @@
                 </li>
               }
             </ul>
-          </div>
-        </div>
-        <label class="label">
-          <span class="label-text-alt">
-            Price
-            <sup class="text-red-500 text-xs">&ast;</sup>
           </span>
-        </label>
-        <input
-          type="number"
-          class="input input-bordered"
-          formControlName="price"
-          [class.input-error]="isFieldInvalid('price')"
-        />
-        <label class="label">
-          <span class="label-text-alt"> Description </span>
-          <p class="text-xs text-gray-500">
-            remaining: {{ remaingCharactersCount("description", 250) }}/250
-          </p>
-        </label>
-        <textarea
-          class="textarea textarea-bordered"
-          maxlength="250"
-          [class.input-error]="isFieldInvalid('description')"
-          formControlName="description"
-        ></textarea>
-        <label class="label">
-          <span class="label-text-alt">
-            Quantity
-            <sup class="text-red-500 text-xs">&ast;</sup>
-          </span>
-        </label>
-        <input
-          type="number"
-          class="input input-bordered"
-          formControlName="quantity"
-          [max]="maxQuantity$.getValue()"
-          [class.input-error]="isFieldInvalid('quantity')"
-        />
-        <label class="label">
-          <span class="label-text-alt">
-            Created At
-            <sup class="text-red-500 text-xs">&ast;</sup>
-          </span>
-        </label>
-        <input
-          type="date"
-          class="input input-bordered"
-          [class.input-error]="isFieldInvalid('createdAt')"
-          formControlName="createdAt"
-        />
-        <label class="label">
-          <span class="label-text-alt"> Select an image </span>
-        </label>
-        <input
-          type="file"
-          class="file-input file-input-bordered w-full max-w-xs"
-        />
+        </span>
+
+        <span>
+          <label class="label">
+            <span class="label-text-alt">
+              Price
+              <sup class="text-red-500 text-xs">&ast;</sup>
+            </span>
+          </label>
+          <input
+            type="number"
+            class="input input-bordered w-full"
+            formControlName="price"
+            [class.input-error]="isFieldInvalid('price')"
+          />
+        </span>
+
+        <span>
+          <label class="label">
+            <span class="label-text-alt"> Description </span>
+            <p
+              class="text-xs text-gray-500"
+              [class.text-error]="
+                remaingCharactersCount('description', 250) < 0
+              "
+            >
+              remaining: {{ remaingCharactersCount("description", 250) }}/250
+            </p>
+          </label>
+          <textarea
+            class="textarea textarea-bordered h-40 w-full"
+            [class.input-error]="isFieldInvalid('description')"
+            formControlName="description"
+          ></textarea>
+        </span>
+
+        <span>
+          <label class="label">
+            <span class="label-text-alt">
+              Quantity
+              <sup class="text-red-500 text-xs">&ast;</sup>
+            </span>
+            <p>max: {{ maxQuantity$.getValue() }}</p>
+          </label>
+          <input
+            type="number"
+            class="input input-bordered w-full"
+            formControlName="quantity"
+            [max]="maxQuantity$.getValue()"
+            [class.input-error]="isFieldInvalid('quantity')"
+          />
+        </span>
+
+        <span>
+          <label class="label">
+            <span class="label-text-alt">
+              Created At
+              <sup class="text-red-500 text-xs">&ast;</sup>
+            </span>
+          </label>
+          <input
+            type="date"
+            class="input input-bordered w-full"
+            [class.input-error]="isFieldInvalid('createdAt')"
+            formControlName="createdAt"
+          />
+        </span>
+
+        <span>
+          <label class="label">
+            <span class="label-text-alt"> Select an image </span>
+          </label>
+          <input type="file" class="file-input file-input-bordered w-full" />
+        </span>
       </div>
       <button
         type="submit"
         class="btn btn-success mt-4"
         [disabled]="productForm.invalid"
       >
-        {{ productId() ? "Update" : "Submit" }}
+        {{ productId$.getValue() ? "Update" : "Submit" }}
       </button>
       <button
         (click)="resetAndToggleForm()"
