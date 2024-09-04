@@ -16,7 +16,7 @@ export class ProductCardComponent {
   constructor(
     private rxdb: RxDBService,
     private communicationService: CommunicationService,
-  ) { }
+  ) {}
 
   private readonly collectionName = 'products';
   @Input({ required: true }) product!: RxDocumentData<ProductDocType>;
