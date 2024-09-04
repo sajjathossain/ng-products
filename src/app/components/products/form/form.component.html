@@ -15,7 +15,9 @@
     </label>
     <form
       [formGroup]="productForm"
-      (submit)="productId$.getValue() ? handleUpdate() : handleSubmit()"
+      (submit)="
+        productId$.getValue() ? handleUpdate($event) : handleSubmit($event)
+      "
       class="menu bg-base-200 text-base-content min-h-full w-full md:w-1/3 p-4"
     >
       <div class="form-control space-y-2">
@@ -138,7 +140,14 @@
           <label class="label">
             <span class="label-text-alt"> Select an image </span>
           </label>
-          <input type="file" class="file-input file-input-bordered w-full" />
+          @if (image$.getValue().length) {
+            <img [src]="image$.getValue()" class="w-36 aspect-square" />
+          }
+          <input
+            (change)="onFileChange($event)"
+            type="file"
+            class="file-input file-input-bordered w-full"
+          />
         </span>
       </div>
       <button

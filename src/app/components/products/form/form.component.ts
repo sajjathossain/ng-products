@@ -80,6 +80,7 @@ export class ProductsFormComponent implements OnInit {
   categories = signal<Record<string, number>>({});
 
   protected readonly datePipe = new DatePipe('en-US');
+  protected image$ = new BehaviorSubject<string>('');
 
   productForm = new FormGroup(
     {
@@ -98,7 +99,10 @@ export class ProductsFormComponent implements OnInit {
       description: new FormControl('', {
         nonNullable: true,
         validators: [Validators.maxLength(250)],
-        updateOn: 'change',
+      }),
+      image: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.min(1)],
       }),
       quantity: new FormControl(1, {
         nonNullable: true,
@@ -114,7 +118,7 @@ export class ProductsFormComponent implements OnInit {
       ),
     },
     {
-      updateOn: 'blur',
+      updateOn: 'change',
     },
   );
   protected showForm = signal(false);
@@ -147,15 +151,19 @@ export class ProductsFormComponent implements OnInit {
     this.productForm.reset(params?.values ?? {});
     this.productId$.next(params?.id ?? null);
     this.maxQuantity$.next(10);
+    this.image$.next(params?.values.image ?? '');
     this.showForm.set(params?.toggle ?? false);
   }
 
-  async handleUpdate() {
+  async handleUpdate(event: Event) {
     const values = {
       ...this.productForm.value,
       name: this.productForm.value.name ?? 'default',
       price: this.productForm.value.price ?? 1,
       createdAt: this.productForm.value.createdAt ?? new Date().toISOString(),
+      image: this.image$.getValue().length
+        ? this.image$.getValue()
+        : this.productForm.get('image')?.value,
     } as ProductDocType;
 
     const result = await this.productRepositoryService.updateProduct({
@@ -169,10 +177,26 @@ export class ProductsFormComponent implements OnInit {
       toast.success(`Product updated.`);
     }
 
+    (event.target as HTMLFormElement)?.reset();
+
     return this.resetAndToggleForm();
   }
 
-  async handleSubmit() {
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      const file = input.files[0];
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const url = event.target?.result;
+        this.image$.next(url! as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async handleSubmit(event: Event) {
     const values = {
       ...this.productForm.value,
       name: this.productForm.value.name!,
@@ -180,6 +204,7 @@ export class ProductsFormComponent implements OnInit {
       createdAt: this.productForm.value.createdAt ?? new Date().toISOString(),
       category: this.productForm.value.category!,
       quantity: this.productForm.value.quantity!,
+      image: this.image$.getValue(),
     };
 
     const result = await this.productRepositoryService.createProduct({
@@ -188,7 +213,7 @@ export class ProductsFormComponent implements OnInit {
     });
 
     if (result) {
-      this.productForm.reset();
+      this.resetAndToggleForm();
       toast.success('Product created successfully!', {
         dismissible: true,
         duration: 1000,
@@ -199,7 +224,7 @@ export class ProductsFormComponent implements OnInit {
       toast.error('Unable to create product');
     }
 
-    this.showForm.set(false);
+    (event.target as HTMLFormElement)?.reset();
   }
 
   convertToHTMLDate(date: string | Date | number) {
@@ -226,6 +251,8 @@ export class ProductsFormComponent implements OnInit {
     if (!product) {
       return toast.error('Unable to find product');
     }
+
+    console.log({ product });
     this.filterByCategory(product.category);
 
     this.resetAndToggleForm({
@@ -285,6 +312,7 @@ export class ProductsFormComponent implements OnInit {
     });
 
     const result = await query.exec();
+
     const shouldShow = result.length > 0 && this.input$.getValue().length > 0;
     this.showCategorySelect.set(shouldShow);
     const mapped = this.convertRxDocumentToCategoryObject(result);
