@@ -5,14 +5,16 @@ import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder';
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update';
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
 import { isDevMode } from '@angular/core';
-import { productSchema } from '@/db/product.schema';
+import { productSchema } from '@/db/product/schema';
 import { BehaviorSubject } from 'rxjs';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 import { disableWarnings } from 'rxdb/plugins/dev-mode';
+import { RxDBAttachmentsPlugin } from 'rxdb/plugins/attachments';
 
 const loadPlugins = async () => {
   addRxPlugin(RxDBQueryBuilderPlugin);
   addRxPlugin(RxDBUpdatePlugin);
+  addRxPlugin(RxDBAttachmentsPlugin);
 
   if (isDevMode()) {
     addRxPlugin(RxDBDevModePlugin);
@@ -55,6 +57,7 @@ export class RxDBService {
 
     this.rxdb = await createRxDatabase({
       name: dbName,
+      password: 'random-ng-proudct-password',
       storage,
       ignoreDuplicate: true,
     });
