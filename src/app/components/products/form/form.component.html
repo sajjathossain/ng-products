@@ -106,7 +106,9 @@
               Quantity
               <sup class="text-red-500 text-xs">&ast;</sup>
             </span>
-            <p>max: {{ maxQuantity$.getValue() }}</p>
+            <p class="text-xs text-gray-500">
+              max value: {{ maxQuantity$.getValue() }}
+            </p>
           </label>
           <input
             type="number"
