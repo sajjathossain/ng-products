@@ -28,10 +28,7 @@
         <input
           type="text"
           class="input input-bordered"
-          [class.input-error]="
-            productForm.get('name')?.invalid &&
-            (productForm.get('name')?.touched || productForm.get('name')?.dirty)
-          "
+          [class.input-error]="isFieldInvalid('name')"
           formControlName="name"
         />
 
@@ -46,6 +43,7 @@
             <input
               class="input input-bordered w-full"
               formControlName="category"
+              [class.input-error]="isFieldInvalid('category')"
               (keyup)="handleInput($event)"
             />
             <ul
@@ -75,17 +73,18 @@
           type="number"
           class="input input-bordered"
           formControlName="price"
-          [class.input-error]="
-            productForm.get('price')?.invalid &&
-            (productForm.get('price')?.touched ||
-              productForm.get('price')?.dirty)
-          "
+          [class.input-error]="isFieldInvalid('price')"
         />
         <label class="label">
           <span class="label-text-alt"> Description </span>
+          <p class="text-xs text-gray-500">
+            remaining: {{ remaingCharactersCount("description", 250) }}/250
+          </p>
         </label>
         <textarea
           class="textarea textarea-bordered"
+          maxlength="250"
+          [class.input-error]="isFieldInvalid('description')"
           formControlName="description"
         ></textarea>
         <label class="label">
@@ -99,11 +98,7 @@
           class="input input-bordered"
           formControlName="quantity"
           [max]="maxQuantity$.getValue()"
-          [class.input-error]="
-            productForm.get('quantity')?.invalid &&
-            (productForm.get('quantity')?.touched ||
-              productForm.get('quantity')?.dirty)
-          "
+          [class.input-error]="isFieldInvalid('quantity')"
         />
         <label class="label">
           <span class="label-text-alt">
@@ -114,12 +109,15 @@
         <input
           type="date"
           class="input input-bordered"
-          [class.input-error]="
-            productForm.get('createdAt')?.invalid &&
-            (productForm.get('createdAt')?.touched ||
-              productForm.get('createdAt')?.dirty)
-          "
+          [class.input-error]="isFieldInvalid('createdAt')"
           formControlName="createdAt"
+        />
+        <label class="label">
+          <span class="label-text-alt"> Select an image </span>
+        </label>
+        <input
+          type="file"
+          class="file-input file-input-bordered w-full max-w-xs"
         />
       </div>
       <button

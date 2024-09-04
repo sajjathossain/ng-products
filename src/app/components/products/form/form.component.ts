@@ -97,6 +97,8 @@ export class ProductsFormComponent implements OnInit {
       }),
       description: new FormControl('', {
         nonNullable: true,
+        validators: [Validators.maxLength(250)],
+        updateOn: 'change',
       }),
       quantity: new FormControl(1, {
         nonNullable: true,
@@ -233,6 +235,20 @@ export class ProductsFormComponent implements OnInit {
       toggle: true,
     });
     return findOne;
+  }
+
+  isFieldInvalid(field: string) {
+    const control = this.productForm.get(field);
+    const isInvalid = control?.invalid && (control?.touched || control?.dirty);
+
+    return isInvalid;
+  }
+
+  remaingCharactersCount(field: string, maxLength: number) {
+    const control = this.productForm.get(field);
+    const value = control?.value;
+    const sub = maxLength - value?.length;
+    return sub;
   }
 
   convertRxDocumentToCategoryObject(data: RxDocument<ProductDocType>[]) {
