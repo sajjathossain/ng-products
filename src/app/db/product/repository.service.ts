@@ -9,7 +9,7 @@ import { v4 as uuid } from 'uuid';
 @Injectable()
 export class ProductRepositoryService {
   private readonly collectionName = 'products';
-  constructor(private readonly rxdbService: RxDBService) { }
+  constructor(private readonly rxdbService: RxDBService) {}
 
   async createProduct({
     productForm,
@@ -23,6 +23,7 @@ export class ProductRepositoryService {
     const productXCollection = this.rxdbService.getCollection<ProductDocType>(
       this.collectionName,
     );
+
     const properties = {
       ...values,
       name: productForm.value.name ?? 'default',
@@ -30,6 +31,7 @@ export class ProductRepositoryService {
       createdAt: productForm.value.createdAt ?? new Date().toISOString(),
       id,
     };
+
     const result = await productXCollection.insert(properties);
 
     if (!result._data) {
