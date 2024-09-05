@@ -9,6 +9,7 @@ import { productSchema } from '@/db/product/schema';
 import { BehaviorSubject } from 'rxjs';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 import { disableWarnings } from 'rxdb/plugins/dev-mode';
+import { categorySchema } from './category/schema';
 
 const loadPlugins = async () => {
   addRxPlugin(RxDBQueryBuilderPlugin);
@@ -36,7 +37,7 @@ export class RxDBService {
       throw new Error('Database not initialized');
     }
 
-    return this.rxdb[collectionName];
+    return this.rxdb.collections[collectionName];
   }
 
   public async initDB(dbName: string) {
@@ -63,6 +64,9 @@ export class RxDBService {
     await this.rxdb.addCollections({
       products: {
         schema: productSchema,
+      },
+      categories: {
+        schema: categorySchema,
       },
     });
 
