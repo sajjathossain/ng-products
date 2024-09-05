@@ -301,7 +301,6 @@ export class ProductRepositoryService {
             if (!upserted._data) {
               return reject('failed');
             }
-            console.log({ upserted });
 
             return resolve(removed._data);
           },

@@ -187,14 +187,11 @@ export class ProductsFormComponent implements OnInit {
     }[];
     const productId = this.productId$.getValue();
     const product = products?.find((item) => item?._data.id === productId);
-    // const formQuantity = Number(this.productForm?.get('quantity')?.value);
     const currentCategoryProductQuantity = find?._data
       .currentQuantity as number;
-    console.log({ currentCategoryProductQuantity });
     // max quantity for normal scenario when creating a new product
     const productQuantity = productId || product ? product?._data.quantity : 0;
     const max = 10 - (currentCategoryProductQuantity - (productQuantity ?? 0));
-    console.log({ max });
 
     const isNaN = Number.isNaN(max);
     this.maxQuantity$?.next(isNaN ? 10 : max);
@@ -322,7 +319,6 @@ export class ProductsFormComponent implements OnInit {
     this.productForm.valueChanges.subscribe((data) =>
       this.adjustFormValidation(data),
     );
-    // this.filterByCategory(product.category);
 
     this.resetAndToggleForm({
       values: {
@@ -368,7 +364,6 @@ export class ProductsFormComponent implements OnInit {
   }
 
   selectCategory(category: string) {
-    console.log({ category });
     this.productForm.get('category')?.setValue(category);
     this.showCategorySelect.set(false);
     this.input$.next(category);
