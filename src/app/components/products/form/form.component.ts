@@ -367,41 +367,6 @@ export class ProductsFormComponent implements OnInit {
     return obj;
   }
 
-  async _filterByCategory(category: string) {
-    const collection =
-      this.rxdbService.getCollection<ProductDocType>('products');
-    console.log({ id: this.productId$.getValue() });
-    const query = collection.find({
-      selector: {
-        category: {
-          $regex: `^.*${category}.*$`,
-          $options: 'i',
-        },
-      },
-      sort: [{ createdAt: 'desc' }],
-    });
-
-    const result = await query.exec();
-
-    const shouldShow = result.length > 0 && this.input$.getValue().length > 0;
-    this.showCategorySelect.set(shouldShow);
-    const mapped = this.convertRxDocumentToCategoryObject(result);
-    const current: number | undefined = mapped[category.trim()];
-    this.categories.set(mapped);
-
-    let max = 10 - (current ?? 0);
-    this.productId$.subscribe((result) => {
-      if (result) {
-        const itemValue = Number(this.getValue('quantity'));
-        const minusCurrent = current - itemValue;
-        const afterCalculation = 10 - minusCurrent;
-
-        max = isNaN(afterCalculation) ? 10 : afterCalculation;
-      }
-      this.maxQuantity$.next(max ?? 10);
-    });
-  }
-
   selectCategory(category: string) {
     console.log({ category });
     this.productForm.get('category')?.setValue(category);
