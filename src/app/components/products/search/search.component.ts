@@ -20,14 +20,14 @@ export class ProductSearchComponent {
     RxDocumentData<ProductDocType>[]
   >;
 
-  constructor(private readonly rxdbService: RxDBService) { }
+  constructor(private readonly rxdbService: RxDBService) {}
 
   toggleDbounce() {
     const enabled = this.enableDebounce.getValue();
     this.enableDebounce.next(!enabled);
   }
 
-  async filetrProducts(term: string) {
+  async filterProducts(term: string) {
     const collection =
       this.rxdbService.getCollection<ProductDocType>('products');
     const query = collection.find({
@@ -52,7 +52,7 @@ export class ProductSearchComponent {
   handleSearch(term: string) {
     setTimeout(
       () => {
-        this.filetrProducts(term);
+        this.filterProducts(term);
       },
       this.enableDebounce.getValue() ? 2000 : 0,
     );
