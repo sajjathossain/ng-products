@@ -55,7 +55,7 @@
                 tabindex="0"
                 class="dropdown-content menu bg-base-300 z-[1] w-full shadow"
               >
-                @for (item of _categories(); track $index) {
+                @for (item of categories(); track $index) {
                   <li
                     role="menuitem"
                     (click)="selectCategory(item)"

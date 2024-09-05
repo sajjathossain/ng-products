@@ -48,7 +48,7 @@ export class ProductsFormComponent implements OnInit {
         products
           .find({ sort: [{ createdAt: 'desc' }] })
           .$.subscribe((result) => {
-            const obj = this.convertRxDocumentToCategoryObject(result);
+            const obj = result.map((item) => item._data.category);
 
             this.categories.set(obj);
           });
@@ -87,8 +87,7 @@ export class ProductsFormComponent implements OnInit {
 
   showCategorySelect = signal(false);
   keys = Object.keys;
-  categories = signal<Record<string, number>>({});
-  _categories = signal<string[]>([]);
+  categories = signal<string[]>([]);
 
   protected readonly datePipe = new DatePipe('en-US');
   protected image$ = new BehaviorSubject<string>('');
@@ -171,7 +170,7 @@ export class ProductsFormComponent implements OnInit {
     this.showCategorySelect?.set(shouldShow);
 
     const mapped = docs?.map((item) => item?._data.name);
-    this._categories?.set(mapped);
+    this.categories?.set(mapped);
 
     const findOneQuery = collection?.findOne({
       selector: {
