@@ -255,16 +255,15 @@ export class ProductsFormComponent implements OnInit {
   async handleSubmit(event: Event) {
     const values = {
       ...this.productForm.value,
-      name: this.productForm.value.name!,
-      price: this.productForm.value.price!,
-      createdAt: this.productForm.value.createdAt ?? new Date().toISOString(),
       category: this.productForm.value.category!,
       quantity: this.productForm.value.quantity!,
       image: this.image$.getValue(),
+      name: this.productForm.value.name ?? 'default',
+      price: this.productForm.value.price ?? 1,
+      createdAt: this.productForm.value.createdAt ?? new Date().toISOString(),
     };
 
     const result = await this.productRepositoryService.createProduct({
-      productForm: this.productForm,
       values,
     });
 

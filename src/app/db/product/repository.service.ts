@@ -1,7 +1,6 @@
 import { ProductDocType } from '@/db/product/schema';
 import { RxDBService } from '@/db/rxdb.service';
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { toast } from 'ngx-sonner';
 import { RxDocumentData } from 'rxdb';
 import { v4 as uuid } from 'uuid';
@@ -24,14 +23,7 @@ export class ProductRepositoryService {
   private readonly collectionName = 'products';
   constructor(private readonly rxdbService: RxDBService) { }
 
-  async createProduct({
-    productForm,
-    values,
-  }: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    productForm: FormGroup<any>;
-    values: ProductDocType;
-  }) {
+  async createProduct({ values }: { values: ProductDocType }) {
     const id = new Date().toISOString() + uuid();
     const productXCollection = this.rxdbService.getCollection<ProductDocType>(
       this.collectionName,
@@ -39,13 +31,10 @@ export class ProductRepositoryService {
     const categoryCollection =
       this.rxdbService.getCollection<CategoryDocType>('categories');
 
-    const { category } = productForm.value;
+    const { category } = values;
 
     const properties = {
       ...values,
-      name: productForm.value.name ?? 'default',
-      price: productForm.value.price ?? 1,
-      createdAt: productForm.value.createdAt ?? new Date().toISOString(),
       id,
     };
 
