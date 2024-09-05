@@ -21,6 +21,7 @@ import { IUpdateProductBehaviorSubject } from '@/lib/types';
 import { ProductDocType } from '@/db/product/schema';
 import { RxDocument } from 'rxdb';
 import { ProductRepositoryService } from '@/db/product/repository.service';
+import { CategoryDocType } from '@/db/category/schema';
 
 @Component({
   selector: 'app-products-form',
@@ -40,6 +41,20 @@ export class ProductsFormComponent implements OnInit {
     private communicationService: CommunicationService,
     private productRepositoryService: ProductRepositoryService,
   ) {
+    effect(() => {
+      if (this.isDbReady()) {
+        const products =
+          this.rxdbService.getCollection<ProductDocType>('products');
+        products
+          .find({ sort: [{ createdAt: 'desc' }] })
+          .$.subscribe((result) => {
+            const obj = this.convertRxDocumentToCategoryObject(result);
+
+            this.categories.set(obj);
+          });
+      }
+    });
+
     this.communicationService.formBehaviorSubject$.subscribe((data) => {
       if (!data) return null;
 
@@ -60,30 +75,29 @@ export class ProductsFormComponent implements OnInit {
       return null;
     });
 
-    effect(() => {
-      if (this.isDbReady()) {
-        const products =
-          this.rxdbService.getCollection<ProductDocType>('products');
-        products
-          .find({ sort: [{ createdAt: 'desc' }] })
-          .$.subscribe((result) => {
-            const obj = this.convertRxDocumentToCategoryObject(result);
-
-            this.categories.set(obj);
-          });
-      }
-    });
+    this.rxdbService.dataBaseReady$
+      .pipe(
+        filter((ready) => !!ready),
+        first(),
+      )
+      .subscribe(() => {
+        this.isDbReady.set(true);
+      });
   }
 
   showCategorySelect = signal(false);
   keys = Object.keys;
   categories = signal<Record<string, number>>({});
+  _categories = signal<string[]>([]);
 
   protected readonly datePipe = new DatePipe('en-US');
   protected image$ = new BehaviorSubject<string>('');
 
   productForm = new FormGroup(
     {
+      id: new FormControl('', {
+        nonNullable: true,
+      }),
       name: new FormControl('', {
         validators: [Validators.required, Validators.minLength(3)],
         nonNullable: true,
@@ -126,20 +140,64 @@ export class ProductsFormComponent implements OnInit {
   protected productId$ = new BehaviorSubject<string | null>(null);
   protected input$ = new BehaviorSubject<string>('');
   protected maxQuantity$ = new BehaviorSubject<number>(10);
+  protected initialCategory = new BehaviorSubject<string>('');
 
   ngOnInit(): void {
-    this.rxdbService.dataBaseReady$
-      .pipe(
-        filter((ready) => !!ready),
-        first(),
-      )
-      .subscribe(() => this.isDbReady.set(true));
-
     this.input$
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((term) => {
-        this.filterByCategory(term);
+        this.adjustFormValidation({ category: term });
       });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async adjustFormValidation(values: Partial<any>) {
+    const { category } = values;
+
+    const collection =
+      this.rxdbService?.getCollection<CategoryDocType>('categories');
+
+    const query = collection?.find({
+      selector: {
+        name: {
+          $regex: `^.*${category}.*$`,
+          $options: 'i',
+        },
+      },
+    });
+    const docs = await query?.exec();
+
+    const shouldShow = docs?.length > 0 && this.input$.getValue().length > 0;
+    this.showCategorySelect?.set(shouldShow);
+
+    const mapped = docs?.map((item) => item?._data.name);
+    this._categories?.set(mapped);
+
+    const findOneQuery = collection?.findOne({
+      selector: {
+        name: {
+          $eq: category,
+        },
+      },
+    });
+
+    const find = await findOneQuery?.exec();
+    const products = (await find?.populate('products')) as {
+      _data: ProductDocType;
+    }[];
+    const productId = this.productId$.getValue();
+    const product = products?.find((item) => item?._data.id === productId);
+    // const formQuantity = Number(this.productForm?.get('quantity')?.value);
+    const currentCategoryProductQuantity = find?._data
+      .currentQuantity as number;
+    console.log({ currentCategoryProductQuantity });
+    // max quantity for normal scenario when creating a new product
+    const productQuantity = productId || product ? product?._data.quantity : 0;
+    const max = 10 - (currentCategoryProductQuantity - (productQuantity ?? 0));
+    console.log({ max });
+
+    const isNaN = Number.isNaN(max);
+    this.maxQuantity$?.next(isNaN ? 10 : max);
   }
 
   resetAndToggleForm(params?: {
@@ -169,6 +227,7 @@ export class ProductsFormComponent implements OnInit {
     const result = await this.productRepositoryService.updateProduct({
       id: this.productId$.getValue()!,
       values,
+      initialCategory: this.initialCategory.getValue(),
     });
 
     if (result === 'failed' || result === 'canceled') {
@@ -177,6 +236,7 @@ export class ProductsFormComponent implements OnInit {
       toast.success(`Product updated.`);
     }
 
+    this.initialCategory.next('');
     (event.target as HTMLFormElement)?.reset();
 
     return this.resetAndToggleForm();
@@ -252,8 +312,17 @@ export class ProductsFormComponent implements OnInit {
       return toast.error('Unable to find product');
     }
 
-    console.log({ product });
-    this.filterByCategory(product.category);
+    const initialValues = {
+      ...product,
+      createdAt: this.convertToHTMLDate(product.createdAt),
+    };
+    this.productId$.next(product.id!);
+    this.initialCategory?.next(initialValues.category);
+
+    this.productForm.valueChanges.subscribe((data) =>
+      this.adjustFormValidation(data),
+    );
+    // this.filterByCategory(product.category);
 
     this.resetAndToggleForm({
       values: {
@@ -298,9 +367,10 @@ export class ProductsFormComponent implements OnInit {
     return obj;
   }
 
-  async filterByCategory(category: string) {
+  async _filterByCategory(category: string) {
     const collection =
       this.rxdbService.getCollection<ProductDocType>('products');
+    console.log({ id: this.productId$.getValue() });
     const query = collection.find({
       selector: {
         category: {
@@ -333,9 +403,10 @@ export class ProductsFormComponent implements OnInit {
   }
 
   selectCategory(category: string) {
+    console.log({ category });
     this.productForm.get('category')?.setValue(category);
-    this.input$.next(category);
     this.showCategorySelect.set(false);
+    this.input$.next(category);
   }
 
   handleInput(event: Event) {
