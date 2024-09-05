@@ -40,9 +40,6 @@ export const productSchema = {
       minLength: 1,
     },
   },
-  attachments: {
-    encrypted: true,
-  },
   required: ['name', 'price', 'createdAt', 'category', 'quantity'],
 } as const;
 

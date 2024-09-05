@@ -9,13 +9,10 @@ import { productSchema } from '@/db/product/schema';
 import { BehaviorSubject } from 'rxjs';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 import { disableWarnings } from 'rxdb/plugins/dev-mode';
-import { RxDBAttachmentsPlugin } from 'rxdb/plugins/attachments';
-import { wrappedKeyEncryptionCryptoJsStorage } from 'rxdb/plugins/encryption-crypto-js';
 
 const loadPlugins = async () => {
   addRxPlugin(RxDBQueryBuilderPlugin);
   addRxPlugin(RxDBUpdatePlugin);
-  addRxPlugin(RxDBAttachmentsPlugin);
 
   if (isDevMode()) {
     addRxPlugin(RxDBDevModePlugin);
@@ -55,10 +52,6 @@ export class RxDBService {
         storage: getRxStorageDexie(),
       });
     }
-
-    storage = wrappedKeyEncryptionCryptoJsStorage({
-      storage: storage,
-    });
 
     this.rxdb = await createRxDatabase({
       name: dbName,
