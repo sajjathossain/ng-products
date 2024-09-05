@@ -140,6 +140,7 @@ export class ProductsFormComponent implements OnInit {
   protected input$ = new BehaviorSubject<string>('');
   protected maxQuantity$ = new BehaviorSubject<number>(10);
   protected initialCategory = new BehaviorSubject<string>('');
+  protected initialQuantity = new BehaviorSubject<number>(0);
 
   ngOnInit(): void {
     this.input$
@@ -188,12 +189,26 @@ export class ProductsFormComponent implements OnInit {
     const product = products?.find((item) => item?._data.id === productId);
     const currentCategoryProductQuantity = find?._data
       .currentQuantity as number;
-    // max quantity for normal scenario when creating a new product
-    const productQuantity = productId || product ? product?._data.quantity : 0;
-    const max = 10 - (currentCategoryProductQuantity - (productQuantity ?? 0));
 
-    const isNaN = Number.isNaN(max);
-    this.maxQuantity$?.next(isNaN ? 10 : max);
+    let max = 10;
+    if (!productId) {
+      if (currentCategoryProductQuantity >= 0) {
+        max = 10 - currentCategoryProductQuantity;
+      }
+    }
+
+    if (productId) {
+      const productQuantity = product?._data.quantity as number;
+      if (category === this.initialCategory.getValue()) {
+        max = 10 - currentCategoryProductQuantity + productQuantity;
+      }
+
+      if (category !== this.initialCategory.getValue()) {
+        max = 10 - (currentCategoryProductQuantity ?? 0);
+      }
+    }
+
+    this.maxQuantity$?.next(max);
   }
 
   resetAndToggleForm(params?: {
@@ -224,6 +239,7 @@ export class ProductsFormComponent implements OnInit {
       id: this.productId$.getValue()!,
       values,
       initialCategory: this.initialCategory.getValue(),
+      initialQuantity: this.initialQuantity.getValue(),
     });
 
     if (result === 'failed' || result === 'canceled') {
@@ -312,6 +328,7 @@ export class ProductsFormComponent implements OnInit {
       createdAt: this.convertToHTMLDate(product.createdAt),
     };
     this.productId$.next(product.id!);
+    this.initialQuantity?.next(initialValues.quantity);
     this.initialCategory?.next(initialValues.category);
 
     this.productForm.valueChanges.subscribe((data) =>

@@ -11,6 +11,7 @@ interface IUpdateExistingProductParams {
   updatedId: string;
   newQuantity: number;
   initialCategory: string;
+  initialQuantity: number;
   newCategory: string;
 }
 
@@ -149,10 +150,12 @@ export class ProductRepositoryService {
     id,
     values,
     initialCategory,
+    initialQuantity,
   }: {
     id: string;
     values: ProductDocType;
     initialCategory: string;
+    initialQuantity: number;
   }) {
     const collection =
       this.rxdbService.getCollection<ProductDocType>('products');
@@ -181,20 +184,24 @@ export class ProductRepositoryService {
               return reject('failed');
             }
 
-            const { categoryDoc, isAddingToExistingCategory } =
-              await this.handleUpdateExistingProduct({
-                updatedCategory: updated._data.category,
-                updatedId: updated._data.id!,
-                newQuantity: values.quantity,
-                initialCategory,
-                newCategory: values.category,
-              });
+            const { categoryDoc } = await this.handleUpdateExistingProduct({
+              initialQuantity,
+              updatedCategory: updated._data.category,
+              updatedId: updated._data.id!,
+              newQuantity: values.quantity,
+              initialCategory,
+              newCategory: values.category,
+            });
 
             const populated = (await categoryDoc!.populate(
               'products',
             )) as IProductParam[];
 
-            let products = populated.map((item) => item._data.id!);
+            let products = populated
+              .filter((item) => item._data.id !== updated._data.id)
+              .map((item) => item._data.id!);
+
+            const isAddingToExistingCategory = Boolean(categoryDoc);
 
             if (isAddingToExistingCategory) {
               products = [...products, updated._data.id!];
@@ -209,14 +216,16 @@ export class ProductRepositoryService {
               currentProductOldQuantity +
               newCategoryQuantity;
 
+            const doesIdExist = categoryDoc._data.products.indexOf(
+              updated._data.id!,
+            );
             // NOTE: if category exists,but initial category is different from new category then increast curent category quantity
-            if (isAddingToExistingCategory) {
+            if (doesIdExist) {
               finalProductsCount = currentCategoryQuantity + values.quantity;
             }
-
             const upserted = await categoryCollection.upsert({
               name: updated._data.category,
-              currentQuantity: finalProductsCount,
+              currentQuantity: Math.min(finalProductsCount, 10),
               products,
             });
 
