@@ -23,7 +23,7 @@
     </thead>
 
     <tbody>
-      @for (row of table.getRowModel().rows; track row.id) {
+      @for (row of table.getRowModel().rows; track row.original.id) {
         <tr class="cursor-pointer hover:bg-base-200 group">
           @for (cell of row.getVisibleCells(); track cell.id) {
             <td>
